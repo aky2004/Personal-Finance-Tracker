@@ -66,7 +66,7 @@ export async function runMigrations() {
   }
 }
 
-if (import.meta.url.endsWith(process.argv[1]) || process.argv[1]?.includes('migrate.ts')) {
+if (process.argv[1]?.includes('migrate.ts')) {
   runMigrations()
     .then(() => process.exit(0))
     .catch(() => process.exit(1));

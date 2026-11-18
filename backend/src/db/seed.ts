@@ -143,7 +143,7 @@ export async function runSeed() {
   }
 }
 
-if (import.meta.url.endsWith(process.argv[1]) || process.argv[1]?.includes('seed.ts')) {
+if (process.argv[1]?.includes('seed.ts')) {
   runSeed()
     .then(() => process.exit(0))
     .catch(() => process.exit(1));
