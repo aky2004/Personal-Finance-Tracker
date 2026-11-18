@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { Sun, Moon, LogOut, Wallet, Shield, User as UserIcon, Eye } from 'lucide-react';
@@ -7,6 +7,12 @@ import { Sun, Moon, LogOut, Wallet, Shield, User as UserIcon, Eye } from 'lucide
 export const Navbar: React.FC = () => {
   const { user, logout, isReadOnly, isAdmin, isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
@@ -58,7 +64,7 @@ export const Navbar: React.FC = () => {
 
           {/* Logout */}
           <button
-            onClick={logout}
+            onClick={handleLogout}
             title="Log Out"
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl transition-colors"
           >

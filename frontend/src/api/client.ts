@@ -20,8 +20,8 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('finance_token');
       localStorage.removeItem('finance_user');
-      if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
-        window.location.href = '/login';
+      if (window.location.pathname !== '/login' && window.location.pathname !== '/register' && window.location.pathname !== '/') {
+        window.location.href = '/';
       }
     }
     return Promise.reject(error);
