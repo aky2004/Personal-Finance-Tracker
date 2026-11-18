@@ -23,7 +23,6 @@ import {
   Eye,
   Cpu,
   ArrowUpRight,
-  ArrowDownLeft,
   Calendar,
   CreditCard,
   Sliders,
@@ -32,14 +31,10 @@ import {
   Check,
   RefreshCw,
   FileSpreadsheet,
-  Building,
-  Coffee,
-  ShoppingBag,
-  DollarSign,
   Activity,
-  ChevronRight,
   ChevronDown,
-  CheckSquare
+  CheckSquare,
+  Users
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
@@ -48,7 +43,7 @@ export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
   // Active tab state for "Plan and Understand" section
-  const [activePlanTab, setActivePlanTab] = useState<'budgets' | 'moneyFlow' | 'savings' | 'trackers' | 'fire'>('budgets');
+  const [activePlanTab, setActivePlanTab] = useState<'categories' | 'trends' | 'comparison' | 'ledger'>('categories');
   
   // Interactive spending pace toggle
   const [spendingPaceMode, setSpendingPaceMode] = useState<'month' | 'avg'>('avg');
@@ -66,7 +61,7 @@ export const LandingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#0b0908] text-[#f2efe9] selection:bg-[#7355be] selection:text-white font-sans transition-colors duration-200">
       
-      {/* 1. Header Navigation (MoneyMatter Style) */}
+      {/* 1. Header Navigation (MoneyMatter Style - Streamlined) */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0b0908]/90 border-b border-[#24211d]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -120,7 +115,7 @@ export const LandingPage: React.FC = () => {
         </div>
       </header>
 
-      {/* 2. SECTION: LIVE DEMO (Exact MoneyMatter Showcase) */}
+      {/* 2. SECTION: LIVE DEMO (Project Telemetry Showcase) */}
       <section id="live-demo" className="pt-16 pb-24 relative overflow-hidden">
         {/* Glow backdrop */}
         <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[720px] h-[340px] bg-[#7355be]/15 rounded-full blur-3xl pointer-events-none -z-10" />
@@ -136,7 +131,7 @@ export const LandingPage: React.FC = () => {
           </h1>
 
           <p className="max-w-xl mx-auto text-sm text-[#8c857b] leading-relaxed">
-            The demo opens a full account with sample data. No signup needed.
+            The demo opens a full account with seeded PostgreSQL transactions and live Redis cache invalidation. No signup needed.
           </p>
 
           {/* MoneyMatter Browser Window Mockup */}
@@ -150,38 +145,39 @@ export const LandingPage: React.FC = () => {
                   <div className="w-3 h-3 rounded-full bg-[#4cc38a]" />
                   <div className="ml-4 px-3 py-1 rounded-md bg-[#0b0908] text-[11px] font-mono text-[#8c857b] border border-[#24211d] flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-[#4cc38a]" />
-                    https://personalfinance.app/dashboard
+                    http://localhost:5173/dashboard
                   </div>
                 </div>
                 <div className="flex items-center gap-2 text-[11px] font-mono text-[#8c857b]">
                   <span className="px-2 py-0.5 rounded bg-[#4cc38a]/10 text-[#4cc38a] border border-[#4cc38a]/30">
-                    Redis Cache HIT (0.6ms)
+                    X-Cache: HIT (0.6ms)
                   </span>
                 </div>
               </div>
 
               {/* App Layout Inside Window */}
               <div className="flex flex-col lg:flex-row">
-                {/* Mini Sidebar */}
+                {/* Mini Sidebar matching our actual App Routes */}
                 <div className="hidden lg:flex w-16 bg-[#100e0c] border-r border-[#24211d] py-5 flex-col items-center justify-between">
                   <div className="space-y-6 flex flex-col items-center">
                     <div className="w-8 h-8 rounded-lg bg-[#7355be] flex items-center justify-center text-white font-bold text-xs">
                       M
                     </div>
-                    <div className="p-2 rounded-lg bg-[#7355be]/20 text-[#9376de]">
+                    {/* Dashboard route icon */}
+                    <Link to="/dashboard" title="Dashboard" className="p-2 rounded-lg bg-[#7355be]/20 text-[#9376de]">
                       <Activity size={18} />
-                    </div>
-                    <div className="p-2 rounded-lg text-[#8c857b] hover:text-white">
+                    </Link>
+                    {/* Transactions route icon */}
+                    <Link to="/transactions" title="Transactions" className="p-2 rounded-lg text-[#8c857b] hover:text-white">
                       <CreditCard size={18} />
-                    </div>
-                    <div className="p-2 rounded-lg text-[#8c857b] hover:text-white">
-                      <Calendar size={18} />
-                    </div>
+                    </Link>
+                    {/* User Directory icon */}
+                    <Link to="/admin/users" title="Admin Users" className="p-2 rounded-lg text-[#8c857b] hover:text-white">
+                      <Users size={18} />
+                    </Link>
+                    {/* Analytics icon */}
                     <div className="p-2 rounded-lg text-[#8c857b] hover:text-white">
                       <PieIcon size={18} />
-                    </div>
-                    <div className="p-2 rounded-lg text-[#8c857b] hover:text-white">
-                      <TrendingUp size={18} />
                     </div>
                   </div>
                   <div className="text-[#8c857b] hover:text-white">
@@ -202,10 +198,10 @@ export const LandingPage: React.FC = () => {
                     </div>
                     <div>
                       <div className="text-2xl font-black font-mono text-white tracking-tight">
-                        $150,840.93
+                        $15,650.00
                       </div>
                       <div className="flex items-center justify-between mt-1 text-[11px]">
-                        <span className="text-[#8c857b] font-mono">OCTOBER 2026</span>
+                        <span className="text-[#8c857b] font-mono">POSTGRESQL SEEDED</span>
                         <span className="text-[#4cc38a] font-mono font-bold">+$2,928.55 +1.98%</span>
                       </div>
                     </div>
@@ -251,31 +247,31 @@ export const LandingPage: React.FC = () => {
                     <div>
                       <div className="flex items-baseline justify-between">
                         <span className="text-2xl font-black font-mono text-[#4cc38a] tracking-tight">
-                          +$2,752.92
+                          +$10,131.30
                         </span>
-                        <span className="text-[11px] font-mono text-[#4cc38a] font-bold">↗ +82% vs prev</span>
+                        <span className="text-[11px] font-mono text-[#4cc38a] font-bold">↗ +64.7% net</span>
                       </div>
-                      <div className="text-[11px] text-[#8c857b] font-mono mt-0.5">OCTOBER 2026</div>
+                      <div className="text-[11px] text-[#8c857b] font-mono mt-0.5">CURRENT FISCAL CYCLE</div>
                     </div>
 
                     {/* Segmented Progress Bar */}
                     <div className="space-y-1.5">
                       <div className="h-2 w-full rounded-full bg-[#24211d] flex overflow-hidden">
-                        <div className="w-[60%] bg-[#4cc38a]" />
-                        <div className="w-[40%] bg-[#ef6a57]" />
+                        <div className="w-[65%] bg-[#4cc38a]" />
+                        <div className="w-[35%] bg-[#ef6a57]" />
                       </div>
                       <div className="grid grid-cols-3 text-[10px] font-mono pt-1">
                         <div>
                           <span className="text-[#8c857b] block">INCOME</span>
-                          <span className="text-[#4cc38a] font-bold">$7,980.13</span>
+                          <span className="text-[#4cc38a] font-bold">$15,650.00</span>
                         </div>
                         <div>
                           <span className="text-[#8c857b] block">EXPENSES</span>
-                          <span className="text-[#ef6a57] font-bold">$5,227.21</span>
+                          <span className="text-[#ef6a57] font-bold">$5,518.70</span>
                         </div>
                         <div>
                           <span className="text-[#8c857b] block">SAVED</span>
-                          <span className="text-[#4cc38a] font-bold">34%</span>
+                          <span className="text-[#4cc38a] font-bold">64.7%</span>
                         </div>
                       </div>
                     </div>
@@ -314,7 +310,7 @@ export const LandingPage: React.FC = () => {
                       </div>
                     </div>
                     <div>
-                      <div className="text-xs text-[#8c857b]">Spent in Nov</div>
+                      <div className="text-xs text-[#8c857b]">Spent this period</div>
                       <div className="text-2xl font-black font-mono text-white tracking-tight">
                         $2,232.83
                       </div>
@@ -339,44 +335,44 @@ export const LandingPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Card 4: Recurring Payments */}
+                  {/* Card 4: Top Category Outflow */}
                   <div className="p-5 rounded-2xl bg-[#1a1714] border border-[#24211d] space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#8c857b]">Recurring payments</span>
+                      <span className="text-xs font-bold text-[#8c857b]">Top Outflow: Housing</span>
                       <ArrowUpRight size={13} className="text-[#8c857b]" />
                     </div>
                     <div>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-black font-mono text-white">$149.90</span>
-                        <span className="text-[11px] text-[#4cc38a] font-mono">2.3% of avg income</span>
+                        <span className="text-2xl font-black font-mono text-[#ef6a57]">-$1,400.00</span>
+                        <span className="text-[11px] text-[#8c857b] font-mono">25.3% of expenses</span>
                       </div>
-                      <div className="text-[11px] text-[#8c857b] mt-1">7 active • ~$1,798.80 per year</div>
+                      <div className="text-[11px] text-[#8c857b] mt-1">Rent &amp; Lease • Monthly Reoccurring</div>
                     </div>
                   </div>
 
-                  {/* Card 5: Expenses Structure */}
+                  {/* Card 5: Total Expenses Structure */}
                   <div className="p-5 rounded-2xl bg-[#1a1714] border border-[#24211d] space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-[#8c857b]">Expenses structure</span>
                       <Sliders size={13} className="text-[#8c857b]" />
                     </div>
                     <div>
-                      <div className="text-2xl font-black font-mono text-[#ef6a57]">-$5,227.21</div>
-                      <div className="text-[11px] text-[#ef6a57] font-bold mt-1">+31.71% vs previous period</div>
+                      <div className="text-2xl font-black font-mono text-[#ef6a57]">-$5,518.70</div>
+                      <div className="text-[11px] text-[#4cc38a] font-bold mt-1">Healthy Outflow Coverage</div>
                     </div>
                   </div>
 
-                  {/* Card 6: FIRE Progress */}
+                  {/* Card 6: Savings Rate & Financial Health */}
                   <div className="p-5 rounded-2xl bg-[#1a1714] border border-[#24211d] space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#8c857b]">FIRE progress</span>
+                      <span className="text-xs font-bold text-[#8c857b]">Savings Rate</span>
                       <ArrowUpRight size={13} className="text-[#8c857b]" />
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5 text-xs text-[#9376de] font-mono font-bold">
-                        <Flame size={14} /> TIME TO FIRE
+                        <Flame size={14} /> FINANCIAL HEALTH
                       </div>
-                      <div className="text-xl font-black font-mono text-white mt-1">11 yrs 4 mos</div>
+                      <div className="text-xl font-black font-mono text-[#4cc38a] mt-1">64.7% Saved</div>
                     </div>
                   </div>
                 </div>
@@ -408,7 +404,7 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 3. SECTION: HOW IT WORKS (MoneyMatter Diagram) */}
+      {/* 3. SECTION: HOW IT WORKS (Project Flow Diagram) */}
       <section id="how-it-works" className="py-24 border-t border-[#24211d] bg-[#0e0c0a] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-left max-w-2xl space-y-3">
@@ -416,89 +412,89 @@ export const LandingPage: React.FC = () => {
               <span>M HOW IT WORKS</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-              From scattered bank data to a settled picture
+              From raw ledger entries to real-time analytics
             </h2>
             <p className="text-sm text-[#8c857b] leading-relaxed">
-              Your transactions arrive messy. By the time you open the app, they are sorted, matched and counted.
+              Every financial transaction is validated against cryptographic RBAC claims, stored in PostgreSQL ACID tables, and cached with Redis for sub-millisecond retrieval.
             </p>
           </div>
 
-          {/* Diagram Flow: Banks -> Engine -> Settled */}
+          {/* Diagram Flow: Ledger -> Engine -> Settled Analytics */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left: Your banks and files */}
+            {/* Left: User Ledger Entries */}
             <div className="lg:col-span-4 space-y-3">
               <div className="text-xs font-bold text-[#8c857b] uppercase tracking-wider mb-2">
-                Your banks and files
+                User Ledger Entries
               </div>
               
               <div className="p-3.5 rounded-xl bg-[#141210] border border-[#24211d] flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-[#24211d] flex items-center justify-center text-[10px] font-bold text-white">
-                    mono
+                  <div className="w-7 h-7 rounded-lg bg-[#4cc38a]/20 text-[#4cc38a] flex items-center justify-center text-xs font-bold">
+                    💼
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-white">Monobank</div>
-                    <div className="text-[10px] font-mono text-[#8c857b]">STREAMBOX RFND</div>
+                    <div className="text-xs font-bold text-white">TechBridge Corp Salary</div>
+                    <div className="text-[10px] font-mono text-[#8c857b]">Category: Salary • Income</div>
                   </div>
                 </div>
-                <span className="text-xs font-mono font-bold text-[#4cc38a]">+12.99</span>
+                <span className="text-xs font-mono font-bold text-[#4cc38a]">+$5,000.00</span>
               </div>
 
               <div className="p-3.5 rounded-xl bg-[#141210] border border-[#24211d] flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-[#f59e0b]/20 text-[#f59e0b] flex items-center justify-center text-xs font-bold">
-                    ☕
+                  <div className="w-7 h-7 rounded-lg bg-[#ef6a57]/20 text-[#ef6a57] flex items-center justify-center text-xs font-bold">
+                    🏠
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-white">Lunch Flow</div>
-                    <div className="text-[10px] font-mono text-[#8c857b]">CORNER COFFEE #0412</div>
+                    <div className="text-xs font-bold text-white">Metro Apartment Rental</div>
+                    <div className="text-[10px] font-mono text-[#8c857b]">Category: Housing • Expense</div>
                   </div>
                 </div>
-                <span className="text-xs font-mono font-bold text-[#ef6a57]">-6.50</span>
+                <span className="text-xs font-mono font-bold text-[#ef6a57]">-$1,400.00</span>
               </div>
 
               <div className="p-3.5 rounded-xl bg-[#141210] border border-[#24211d] flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-bold">
-                    ▲
+                  <div className="w-7 h-7 rounded-lg bg-[#4cc38a]/20 text-[#4cc38a] flex items-center justify-center text-xs font-bold">
+                    💻
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-white">SimpleFIN</div>
-                    <div className="text-[10px] font-mono text-[#8c857b]">ACME PAYROLL OCT</div>
+                    <div className="text-xs font-bold text-white">Client Frontend Contract</div>
+                    <div className="text-[10px] font-mono text-[#8c857b]">Category: Freelance • Income</div>
                   </div>
                 </div>
-                <span className="text-xs font-mono font-bold text-[#4cc38a]">+4200.00</span>
+                <span className="text-xs font-mono font-bold text-[#4cc38a]">+$1,200.00</span>
               </div>
 
               <div className="p-3.5 rounded-xl bg-[#141210] border border-[#24211d] flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-[#24211d] flex items-center justify-center text-xs text-[#8c857b]">
-                    📄
+                  <div className="w-7 h-7 rounded-lg bg-[#ef6a57]/20 text-[#ef6a57] flex items-center justify-center text-xs font-bold">
+                    🛒
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-white">Bank statement</div>
-                    <div className="text-[10px] font-mono text-[#8c857b]">TRF TO SAVINGS</div>
+                    <div className="text-xs font-bold text-white">Whole Foods Market</div>
+                    <div className="text-[10px] font-mono text-[#8c857b]">Category: Food • Expense</div>
                   </div>
                 </div>
-                <span className="text-xs font-mono font-bold text-[#ef6a57]">-500.00</span>
+                <span className="text-xs font-mono font-bold text-[#ef6a57]">-$142.80</span>
               </div>
 
               <div className="text-[11px] text-[#8c857b] pt-1 italic">
-                Sample data with fictional merchants.
+                Actual relational records seeded in PostgreSQL personal_finance DB.
               </div>
             </div>
 
-            {/* Center: MoneyMatter Auto Engine */}
-            <div className="lg:col-span-3">
+            {/* Center: Processing Engine */}
+            <div className="lg:col-span-4">
               <div className="text-xs font-bold text-[#8c857b] uppercase tracking-wider mb-2 text-center lg:text-left">
-                Sorted automatically
+                Processing &amp; Cache Engine
               </div>
               <div className="p-6 rounded-2xl bg-gradient-to-b from-[#1e172a] to-[#141210] border border-[#7355be]/40 shadow-xl shadow-[#7355be]/10 space-y-5">
                 <div className="flex items-center gap-2.5">
                   <div className="w-7 h-7 rounded-lg bg-[#7355be] flex items-center justify-center text-white font-bold text-xs">
                     M
                   </div>
-                  <span className="font-extrabold text-sm text-white">MoneyMatter</span>
+                  <span className="font-extrabold text-sm text-white">Node.js + Redis Core</span>
                 </div>
 
                 <div className="space-y-3 text-xs">
@@ -506,42 +502,43 @@ export const LandingPage: React.FC = () => {
                     <div className="w-4 h-4 rounded-full bg-[#7355be] flex items-center justify-center text-[10px] text-white">
                       ✓
                     </div>
-                    <span>Categorizing</span>
+                    <span>JWT Signature &amp; RBAC Verification</span>
                   </div>
                   <div className="flex items-center gap-2 text-white">
                     <div className="w-4 h-4 rounded-full bg-[#7355be] flex items-center justify-center text-[10px] text-white">
                       ✓
                     </div>
-                    <span>Applying your rules</span>
+                    <span>Parametric SQL (SQLi Guard)</span>
                   </div>
                   <div className="flex items-center gap-2 text-white">
                     <div className="w-4 h-4 rounded-full bg-[#7355be] flex items-center justify-center text-[10px] text-white">
                       ✓
                     </div>
-                    <span>Matching transfers and refunds</span>
+                    <span>Atomic Redis Cache Invalidation</span>
                   </div>
                   <div className="flex items-center gap-2 text-white">
                     <div className="w-4 h-4 rounded-full bg-[#7355be] flex items-center justify-center text-[10px] text-white">
                       ✓
                     </div>
-                    <span>Finding payees</span>
+                    <span>15-min In-Memory Aggregations</span>
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-[#7355be]/20 text-[11px] font-mono text-[#9376de]">
-                  5 transactions sorted
+                <div className="pt-3 border-t border-[#7355be]/20 text-[11px] font-mono text-[#9376de] flex items-center justify-between">
+                  <span>Latency: ~0.8ms</span>
+                  <span className="text-[#4cc38a]">X-Cache: HIT</span>
                 </div>
               </div>
             </div>
 
-            {/* Right: Everything settled */}
-            <div className="lg:col-span-5 space-y-3">
+            {/* Right: Settled Analytics */}
+            <div className="lg:col-span-4 space-y-3">
               <div className="text-xs font-bold text-[#8c857b] uppercase tracking-wider mb-2">
-                Everything settled
+                Settled Analytics &amp; KPIs
               </div>
               <div className="p-6 rounded-2xl bg-[#141210] border border-[#24211d] space-y-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-white">All settled</span>
+                  <span className="text-xs font-bold text-white">Real-Time Overview</span>
                   <div className="w-5 h-5 rounded-full bg-[#4cc38a] flex items-center justify-center text-[11px] text-black font-black">
                     ✓
                   </div>
@@ -549,34 +546,34 @@ export const LandingPage: React.FC = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-3.5 rounded-xl bg-[#1a1714] border border-[#24211d]">
-                    <div className="text-[11px] text-[#8c857b]">Net worth</div>
-                    <div className="text-lg font-black font-mono text-white mt-0.5">$18,262.64</div>
-                    <div className="text-[10px] text-[#4cc38a] font-mono mt-1">+$4,122.29</div>
+                    <div className="text-[11px] text-[#8c857b]">Net Cash Flow</div>
+                    <div className="text-lg font-black font-mono text-white mt-0.5">+$10,131.30</div>
+                    <div className="text-[10px] text-[#4cc38a] font-mono mt-1">+64.7% Saved</div>
                   </div>
                   <div className="p-3.5 rounded-xl bg-[#1a1714] border border-[#24211d] space-y-1">
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-[#8c857b]">Checking</span>
-                      <span className="text-white font-mono font-bold">$5,762.64</span>
+                      <span className="text-[#8c857b]">Inflow</span>
+                      <span className="text-[#4cc38a] font-mono font-bold">+$15,650</span>
                     </div>
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-[#8c857b]">Savings</span>
-                      <span className="text-white font-mono font-bold">$12,500.00</span>
+                      <span className="text-[#8c857b]">Outflow</span>
+                      <span className="text-[#ef6a57] font-mono font-bold">-$5,518</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#24211d] text-center">
                   <div className="p-2 rounded-lg bg-[#1a1714]">
-                    <span className="text-[10px] text-[#8c857b] block">Income</span>
-                    <span className="text-xs font-mono font-bold text-[#4cc38a]">+$4,200.00</span>
+                    <span className="text-[10px] text-[#8c857b] block">Categories</span>
+                    <span className="text-xs font-mono font-bold text-white">11 Active</span>
                   </div>
                   <div className="p-2 rounded-lg bg-[#1a1714]">
-                    <span className="text-[10px] text-[#8c857b] block">Expenses</span>
-                    <span className="text-xs font-mono font-bold text-[#ef6a57]">-$77.71</span>
+                    <span className="text-[10px] text-[#8c857b] block">Cache TTL</span>
+                    <span className="text-xs font-mono font-bold text-[#9376de]">900s</span>
                   </div>
                   <div className="p-2 rounded-lg bg-[#1a1714]">
-                    <span className="text-[10px] text-[#8c857b] block">Groceries</span>
-                    <span className="text-xs font-mono font-bold text-white">$84 of $400</span>
+                    <span className="text-[10px] text-[#8c857b] block">Rate Limit</span>
+                    <span className="text-xs font-mono font-bold text-[#4cc38a]">Active</span>
                   </div>
                 </div>
               </div>
@@ -585,161 +582,157 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. SECTION: AUTOMATION (MoneyMatter Rules & Smart Matching) */}
+      {/* 4. SECTION: AUTOMATION & SECURITY (Architecture Engine) */}
       <section id="automation" className="py-24 border-t border-[#24211d] bg-[#0b0908] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-left max-w-2xl space-y-3">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#9376de] tracking-wider uppercase">
-              <span>M AUTOMATION</span>
+              <span>M SYSTEM ENGINE</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-              The tedious part is done before you open the app
+              High performance built into every layer
             </h2>
+            <p className="text-sm text-[#8c857b] leading-relaxed">
+              Every request is governed by automated caching, RBAC role validation, and multi-tier rate limiting.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Card 1: AI Categorization */}
+            {/* Card 1: Automated Cache Invalidation */}
             <div className="p-6 rounded-2xl bg-[#141210] border border-[#24211d] space-y-5">
               <div className="space-y-2.5">
                 <div className="p-3 rounded-xl bg-[#1a1714] border border-[#24211d] flex items-center justify-between text-xs font-mono">
-                  <span className="text-[#8c857b]">GRN MKT 88213</span>
+                  <span className="text-[#8c857b]">POST /api/transactions</span>
                   <span className="text-[#8c857b]">→</span>
                   <span className="text-white font-bold flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#4cc38a]" /> Green Market
+                    <span className="w-2 h-2 rounded-full bg-[#4cc38a]" /> PostgreSQL Write
                   </span>
                   <span className="px-2 py-0.5 rounded-full bg-[#4cc38a]/10 text-[#4cc38a] text-[10px] font-bold">
-                    Groceries
+                    ACID Commit
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-[#1a1714] border border-[#24211d] flex items-center justify-between text-xs font-mono">
-                  <span className="text-[#8c857b]">CORNER COFFEE #0412</span>
+                  <span className="text-[#8c857b]">invalidateUserAnalytics(id)</span>
                   <span className="text-[#8c857b]">→</span>
-                  <span className="text-white font-bold flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#f59e0b]" /> Corner Coffee
-                  </span>
-                  <span className="px-2 py-0.5 rounded-full bg-[#f59e0b]/10 text-[#f59e0b] text-[10px] font-bold">
-                    Eating out
-                  </span>
-                </div>
-
-                <div className="p-3 rounded-xl bg-[#1a1714] border border-[#24211d] flex items-center justify-between text-xs font-mono">
-                  <span className="text-[#8c857b]">ACME PAYROLL OCT</span>
-                  <span className="text-[#8c857b]">→</span>
-                  <span className="text-white font-bold flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#7355be]" /> Acme Inc
+                  <span className="text-[#9376de] font-bold flex items-center gap-1.5">
+                    <RefreshCw size={12} /> Redis Flush
                   </span>
                   <span className="px-2 py-0.5 rounded-full bg-[#7355be]/20 text-[#9376de] text-[10px] font-bold">
-                    Salary
+                    Purged
+                  </span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-[#1a1714] border border-[#24211d] flex items-center justify-between text-xs font-mono">
+                  <span className="text-[#8c857b]">GET /api/analytics/overview</span>
+                  <span className="text-[#8c857b]">→</span>
+                  <span className="text-white font-bold">Fresh Re-compute</span>
+                  <span className="px-2 py-0.5 rounded-full bg-[#4cc38a]/10 text-[#4cc38a] text-[10px] font-bold">
+                    Re-cached 15m
                   </span>
                 </div>
               </div>
 
               <div>
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <Sparkles size={16} className="text-[#9376de]" /> AI categorization
+                  <Zap size={16} className="text-[#9376de]" /> Automated Cache Invalidation
                 </h3>
                 <p className="text-xs text-[#8c857b] mt-1 leading-relaxed">
-                  Cryptic bank descriptions become real categories, without a setup step.
+                  Write once, invalidate atomically. Any transaction create, edit, or delete automatically purges Redis keys for that user, guaranteeing no stale read lag.
                 </p>
               </div>
             </div>
 
-            {/* Card 2: Your Rules */}
+            {/* Card 2: Cryptographic RBAC Guards */}
             <div className="p-6 rounded-2xl bg-[#141210] border border-[#24211d] space-y-5">
               <div className="p-5 rounded-xl bg-[#1a1714] border border-[#24211d] space-y-3 font-mono text-xs">
                 <div className="flex items-center gap-2">
                   <span className="text-[#8c857b] uppercase text-[10px] font-bold w-12">WHEN</span>
-                  <span className="px-2.5 py-1 rounded bg-[#24211d] text-white">Payee contains Corner Coffee</span>
+                  <span className="px-2.5 py-1 rounded bg-[#24211d] text-white">Role === 'read-only'</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[#8c857b] uppercase text-[10px] font-bold w-12">THEN</span>
-                  <span className="px-2.5 py-1 rounded bg-[#24211d] text-[#f59e0b]">set category to 🍴 Eating out</span>
+                  <span className="px-2.5 py-1 rounded bg-[#24211d] text-[#ef6a57]">requireCanMutate rejects with 403 Forbidden</span>
                 </div>
                 <div className="pt-2 text-[11px] text-[#4cc38a] flex items-center gap-1.5">
-                  <Check size={13} /> Runs on every new transaction
+                  <Check size={13} /> Evaluated via signed JWT claims on every HTTP request
                 </div>
               </div>
 
               <div>
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <Sliders size={16} className="text-[#9376de]" /> Your rules
+                  <Shield size={16} className="text-[#9376de]" /> Role-Based Access Control
                 </h3>
                 <p className="text-xs text-[#8c857b] mt-1 leading-relaxed">
-                  Decide once how something should be handled, and it stays handled.
+                  Decide once how roles behave. Administrators oversee all users and global data; Standard users mutate personal records; Read-only users have mutation actions blocked.
                 </p>
               </div>
             </div>
 
-            {/* Card 3: Transfers and refunds */}
+            {/* Card 3: Tiered Rate Limiting Protection */}
             <div className="p-6 rounded-2xl bg-[#141210] border border-[#24211d] space-y-5">
               <div className="p-4 rounded-xl bg-[#1a1714] border border-[#24211d] space-y-2.5">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-[#8c857b] flex items-center gap-1.5">🏦 Checking</span>
-                  <span className="font-mono text-[#ef6a57] font-bold">-$500.00</span>
-                </div>
-                <div className="px-3 py-1 rounded-lg bg-[#24211d] text-[11px] text-[#9376de] flex items-center justify-center gap-1.5 font-mono">
-                  <RefreshCw size={12} /> One transfer, both sides matched
+                  <span className="text-[#8c857b] flex items-center gap-1.5">🛡️ Auth Routes</span>
+                  <span className="font-mono text-[#f59e0b] font-bold">5 requests / 15 mins</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-[#8c857b] flex items-center gap-1.5">🛡️ Savings</span>
-                  <span className="font-mono text-[#4cc38a] font-bold">+$500.00</span>
+                  <span className="text-[#8c857b] flex items-center gap-1.5">💳 Transaction Routes</span>
+                  <span className="font-mono text-[#4cc38a] font-bold">100 requests / hour</span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-[#8c857b] flex items-center gap-1.5">📊 Analytics Routes</span>
+                  <span className="font-mono text-[#9376de] font-bold">50 requests / hour</span>
                 </div>
               </div>
 
               <div>
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <RefreshCw size={16} className="text-[#9376de]" /> Transfers and refunds
+                  <Lock size={16} className="text-[#9376de]" /> Tiered Rate Limiting
                 </h3>
                 <p className="text-xs text-[#8c857b] mt-1 leading-relaxed">
-                  Both sides get matched, so moving money never looks like spending it.
+                  Guards the API against brute-force attacks and resource exhaustion via `express-rate-limit` window thresholds.
                 </p>
               </div>
             </div>
 
-            {/* Card 4: Payees and subscriptions */}
+            {/* Card 4: Virtual Scrolling Window Engine */}
             <div className="p-6 rounded-2xl bg-[#141210] border border-[#24211d] space-y-5">
               <div className="p-4 rounded-xl bg-[#1a1714] border border-[#24211d] space-y-2.5">
                 <div className="flex items-center justify-between text-xs font-mono pb-1 border-b border-[#24211d]">
-                  <span className="text-[#8c857b]">3 recurring payments found</span>
-                  <span className="text-white font-bold">$96.99 / month</span>
+                  <span className="text-[#8c857b]">Ledger Virtual Engine</span>
+                  <span className="text-[#4cc38a] font-bold">60 FPS Smooth Scroll</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-white flex items-center gap-2">
-                    <span className="w-5 h-5 rounded bg-red-600 flex items-center justify-center text-[10px]">▶</span>
-                    Streambox (next Nov 14)
-                  </span>
-                  <span className="font-mono text-white">$12.99</span>
+                  <span className="text-white">Dataset Capacity</span>
+                  <span className="font-mono text-white">50,000+ rows</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-white flex items-center gap-2">
-                    <span className="w-5 h-5 rounded bg-purple-600 flex items-center justify-center text-[10px]">F</span>
-                    Fit Club (next Nov 20)
-                  </span>
-                  <span className="font-mono text-white">$39.00</span>
+                  <span className="text-white">Active DOM Nodes</span>
+                  <span className="font-mono text-[#9376de]">Only visible rows</span>
                 </div>
               </div>
 
               <div>
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <CreditCard size={16} className="text-[#9376de]" /> Payees and subscriptions
+                  <Layers size={16} className="text-[#9376de]" /> Windowed Virtual Scrolling
                 </h3>
                 <p className="text-xs text-[#8c857b] mt-1 leading-relaxed">
-                  Merchants are recognized and recurring payments show up on their own.
+                  Only the transactions currently inside the viewport are rendered in the DOM, eliminating browser lag and memory bloat.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Bottom 2 pill highlights */}
+          {/* Bottom 2 Highlights */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-4 rounded-xl bg-[#141210] border border-[#24211d] flex items-center gap-3">
               <div className="p-2 rounded-lg bg-[#7355be]/20 text-[#9376de]">
-                <CheckSquare size={16} />
+                <PieIcon size={16} />
               </div>
               <div>
-                <div className="text-xs font-bold text-white">Account reconciliation</div>
-                <div className="text-[11px] text-[#8c857b]">Check your balance against the bank's and settle the difference.</div>
+                <div className="text-xs font-bold text-white">3 Recharts Visualizations</div>
+                <div className="text-[11px] text-[#8c857b]">Category Pie, Monthly Trends Line, and Income vs Expense Bar charts styled in MoneyMatter colors.</div>
               </div>
             </div>
 
@@ -748,15 +741,15 @@ export const LandingPage: React.FC = () => {
                 <FileSpreadsheet size={16} />
               </div>
               <div>
-                <div className="text-xs font-bold text-white">Statement import</div>
-                <div className="text-[11px] text-[#8c857b]">Drop in a bank statement. AI-assisted parsing handles messy files.</div>
+                <div className="text-xs font-bold text-white">OpenAPI 3.0 Documentation</div>
+                <div className="text-[11px] text-[#8c857b]">Every REST endpoint documented with request schemas and interactive try-it-out mode at `/api/docs`.</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. SECTION: PLAN AND UNDERSTAND (MoneyMatter Budget Spreadsheet) */}
+      {/* 5. SECTION: PLAN AND UNDERSTAND (Category Budgets from our Seed DB) */}
       <section id="plan" className="py-24 border-t border-[#24211d] bg-[#0e0c0a] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-left max-w-2xl space-y-3">
@@ -766,133 +759,135 @@ export const LandingPage: React.FC = () => {
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
               See where it goes, then decide where it should
             </h2>
+            <p className="text-sm text-[#8c857b] leading-relaxed">
+              Explore your live spending categories, monthly trends, and budget allocations directly from the database.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left Nav Pill Tabs */}
+            {/* Left Nav Pill Tabs matching our project capabilities */}
             <div className="lg:col-span-4 space-y-2">
               <button
-                onClick={() => setActivePlanTab('budgets')}
+                onClick={() => setActivePlanTab('categories')}
                 className={`w-full p-4 rounded-2xl text-left transition-all border ${
-                  activePlanTab === 'budgets'
+                  activePlanTab === 'categories'
                     ? 'bg-[#1a1714] border-[#7355be]/50 shadow-lg'
                     : 'bg-[#141210] border-[#24211d] hover:bg-[#1a1714]'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${activePlanTab === 'budgets' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
+                  <div className={`p-2 rounded-xl ${activePlanTab === 'categories' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
                     <Calendar size={17} />
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-white">Budgets</div>
+                    <div className="text-sm font-bold text-white">Category Allocations</div>
                     <div className="text-xs text-[#8c857b] mt-0.5">
-                      Assign money to lines and see what is left at a glance.
+                      Assign budget targets to Housing, Groceries, and Utilities.
                     </div>
                   </div>
                 </div>
               </button>
 
               <button
-                onClick={() => setActivePlanTab('moneyFlow')}
+                onClick={() => setActivePlanTab('trends')}
                 className={`w-full p-4 rounded-2xl text-left transition-all border ${
-                  activePlanTab === 'moneyFlow'
+                  activePlanTab === 'trends'
                     ? 'bg-[#1a1714] border-[#7355be]/50 shadow-lg'
                     : 'bg-[#141210] border-[#24211d] hover:bg-[#1a1714]'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${activePlanTab === 'moneyFlow' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
+                  <div className={`p-2 rounded-xl ${activePlanTab === 'trends' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
                     <Activity size={17} />
                   </div>
-                  <div className="text-sm font-bold text-white">Money flow</div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setActivePlanTab('savings')}
-                className={`w-full p-4 rounded-2xl text-left transition-all border ${
-                  activePlanTab === 'savings'
-                    ? 'bg-[#1a1714] border-[#7355be]/50 shadow-lg'
-                    : 'bg-[#141210] border-[#24211d] hover:bg-[#1a1714]'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${activePlanTab === 'savings' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
-                    <Target size={17} />
+                  <div>
+                    <div className="text-sm font-bold text-white">Monthly Trends</div>
+                    <div className="text-xs text-[#8c857b] mt-0.5">
+                      Track inflow and outflow patterns across 6 months.
+                    </div>
                   </div>
-                  <div className="text-sm font-bold text-white">Savings goals</div>
                 </div>
               </button>
 
               <button
-                onClick={() => setActivePlanTab('trackers')}
+                onClick={() => setActivePlanTab('comparison')}
                 className={`w-full p-4 rounded-2xl text-left transition-all border ${
-                  activePlanTab === 'trackers'
+                  activePlanTab === 'comparison'
                     ? 'bg-[#1a1714] border-[#7355be]/50 shadow-lg'
                     : 'bg-[#141210] border-[#24211d] hover:bg-[#1a1714]'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${activePlanTab === 'trackers' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
+                  <div className={`p-2 rounded-xl ${activePlanTab === 'comparison' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
                     <PieIcon size={17} />
                   </div>
-                  <div className="text-sm font-bold text-white">Trackers</div>
+                  <div>
+                    <div className="text-sm font-bold text-white">Income vs Expense</div>
+                    <div className="text-xs text-[#8c857b] mt-0.5">
+                      Recharts multi-series comparison chart.
+                    </div>
+                  </div>
                 </div>
               </button>
 
               <button
-                onClick={() => setActivePlanTab('fire')}
+                onClick={() => setActivePlanTab('ledger')}
                 className={`w-full p-4 rounded-2xl text-left transition-all border ${
-                  activePlanTab === 'fire'
+                  activePlanTab === 'ledger'
                     ? 'bg-[#1a1714] border-[#7355be]/50 shadow-lg'
                     : 'bg-[#141210] border-[#24211d] hover:bg-[#1a1714]'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${activePlanTab === 'fire' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
-                    <Flame size={17} />
+                  <div className={`p-2 rounded-xl ${activePlanTab === 'ledger' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
+                    <Layers size={17} />
                   </div>
-                  <div className="text-sm font-bold text-white">FIRE (Financial Independence)</div>
+                  <div>
+                    <div className="text-sm font-bold text-white">Virtual Ledger</div>
+                    <div className="text-xs text-[#8c857b] mt-0.5">
+                      60 FPS windowed virtual list for large ledgers.
+                    </div>
+                  </div>
                 </div>
               </button>
             </div>
 
-            {/* Right Interactive Table View */}
+            {/* Right Interactive Table View populated with our seed categories */}
             <div className="lg:col-span-8 rounded-2xl bg-[#141210] border border-[#24211d] p-6 shadow-2xl overflow-x-auto">
               <div className="min-w-[550px]">
                 {/* Table Header */}
                 <div className="grid grid-cols-12 text-[11px] font-mono font-bold text-[#8c857b] pb-3 border-b border-[#24211d]">
                   <div className="col-span-6 flex items-center gap-2">
                     <span className="w-3.5 h-3.5 rounded border border-[#8c857b]/40" />
-                    LINE GROUP +
+                    CATEGORY GROUP
                   </div>
-                  <div className="col-span-2 text-right">ASSIGNED</div>
-                  <div className="col-span-2 text-right">ACTIVITY</div>
-                  <div className="col-span-2 text-right">AVAILABLE</div>
+                  <div className="col-span-2 text-right">BUDGETED</div>
+                  <div className="col-span-2 text-right">ACTUAL SPENT</div>
+                  <div className="col-span-2 text-right">REMAINING</div>
                 </div>
 
-                {/* Group 1: BILLS */}
+                {/* Group 1: ESSENTIAL EXPENSES */}
                 <div className="pt-4 space-y-3">
                   <div className="flex items-center justify-between text-xs font-bold text-white">
                     <span className="flex items-center gap-2">
-                      <ChevronDown size={13} className="text-[#8c857b]" /> BILLS +
+                      <ChevronDown size={13} className="text-[#8c857b]" /> ESSENTIALS (FIXED)
                     </span>
                     <span className="text-[11px] font-mono text-[#8c857b]">$1.78K • -$1.49K • $295.96</span>
                   </div>
 
-                  {/* Rent Row */}
+                  {/* Housing / Rent Row */}
                   <div className="grid grid-cols-12 text-xs font-mono py-1.5 items-center">
                     <div className="col-span-6 pl-4 space-y-1">
                       <div className="flex items-center justify-between pr-4">
-                        <span className="text-white">Rent</span>
+                        <span className="text-white">Housing / Rent</span>
                         <span className="text-[10px] text-[#8c857b]">100% used • $1.4K of $1.4K</span>
                       </div>
                       <div className="h-1.5 w-full bg-[#24211d] rounded-full overflow-hidden">
                         <div className="w-full h-full bg-[#4cc38a]" />
                       </div>
                     </div>
-                    <div className="col-span-2 text-right text-white">$1.4K</div>
-                    <div className="col-span-2 text-right text-[#ef6a57]">-$1.4K</div>
+                    <div className="col-span-2 text-right text-white">$1,400.00</div>
+                    <div className="col-span-2 text-right text-[#ef6a57]">-$1,400.00</div>
                     <div className="col-span-2 text-right text-[#8c857b]">$0.00</div>
                   </div>
 
@@ -900,67 +895,67 @@ export const LandingPage: React.FC = () => {
                   <div className="grid grid-cols-12 text-xs font-mono py-1.5 items-center">
                     <div className="col-span-6 pl-4 space-y-1">
                       <div className="flex items-center justify-between pr-4">
-                        <span className="text-white">Utilities</span>
-                        <span className="text-[10px] text-[#4cc38a]">0% used</span>
+                        <span className="text-white">Utilities &amp; Internet</span>
+                        <span className="text-[10px] text-[#4cc38a]">60% used</span>
                       </div>
                       <div className="h-1.5 w-full bg-[#24211d] rounded-full overflow-hidden">
-                        <div className="w-[5%] h-full bg-[#4cc38a]" />
+                        <div className="w-[60%] h-full bg-[#4cc38a]" />
                       </div>
                     </div>
-                    <div className="col-span-2 text-right text-white">$120.00</div>
-                    <div className="col-span-2 text-right text-[#8c857b]">$0.00</div>
-                    <div className="col-span-2 text-right text-[#4cc38a]">$120.50</div>
+                    <div className="col-span-2 text-right text-white">$250.00</div>
+                    <div className="col-span-2 text-right text-[#ef6a57]">-$150.00</div>
+                    <div className="col-span-2 text-right text-[#4cc38a]">$100.00</div>
                   </div>
                 </div>
 
-                {/* Group 2: EVERYDAY */}
+                {/* Group 2: VARIABLE DISCRETIONARY */}
                 <div className="pt-6 space-y-3 border-t border-[#24211d] mt-4">
                   <div className="flex items-center justify-between text-xs font-bold text-white">
                     <span className="flex items-center gap-2">
-                      <ChevronDown size={13} className="text-[#8c857b]" /> EVERYDAY +
+                      <ChevronDown size={13} className="text-[#8c857b]" /> VARIABLE &amp; LIVING
                     </span>
-                    <span className="text-[11px] font-mono text-[#8c857b]">$2.45K • -$461.65 • $2.58K</span>
+                    <span className="text-[11px] font-mono text-[#8c857b]">$1.45K • -$870.00 • $580.00</span>
                   </div>
 
-                  {/* Groceries */}
+                  {/* Food / Groceries */}
                   <div className="grid grid-cols-12 text-xs font-mono py-1.5 items-center">
                     <div className="col-span-6 pl-4 space-y-1">
                       <div className="flex items-center justify-between pr-4">
-                        <span className="text-white">Groceries</span>
-                        <span className="text-[10px] text-[#4cc38a]">✓ Funded</span>
+                        <span className="text-white">Food &amp; Groceries</span>
+                        <span className="text-[10px] text-[#4cc38a]">✓ On Track</span>
                       </div>
                       <div className="h-1.5 w-full bg-[#24211d] rounded-full overflow-hidden">
-                        <div className="w-[30%] h-full bg-[#4cc38a]" />
+                        <div className="w-[65%] h-full bg-[#4cc38a]" />
                       </div>
                     </div>
                     <div className="col-span-2 text-right text-white">$650.00</div>
-                    <div className="col-span-2 text-right text-[#ef6a57]">-$201.42</div>
-                    <div className="col-span-2 text-right text-[#4cc38a]">$810.46</div>
+                    <div className="col-span-2 text-right text-[#ef6a57]">-$420.00</div>
+                    <div className="col-span-2 text-right text-[#4cc38a]">$230.00</div>
                   </div>
 
-                  {/* Eating out - Over Budget! */}
+                  {/* Transportation */}
                   <div className="grid grid-cols-12 text-xs font-mono py-1.5 items-center">
                     <div className="col-span-6 pl-4 space-y-1">
                       <div className="flex items-center justify-between pr-4">
-                        <span className="text-white">Eating out</span>
-                        <span className="text-[10px] text-[#ef6a57] font-bold">Over by $85.51</span>
+                        <span className="text-white">Transportation</span>
+                        <span className="text-[10px] text-[#4cc38a]">✓ Funded</span>
                       </div>
                       <div className="h-1.5 w-full bg-[#24211d] rounded-full overflow-hidden">
-                        <div className="w-full h-full bg-[#ef6a57]" />
+                        <div className="w-[50%] h-full bg-[#4cc38a]" />
                       </div>
                     </div>
-                    <div className="col-span-2 text-right text-white">$430.00</div>
-                    <div className="col-span-2 text-right text-[#ef6a57]">-$209.57</div>
-                    <div className="col-span-2 text-right text-[#ef6a57] font-bold">-$85.51</div>
+                    <div className="col-span-2 text-right text-white">$300.00</div>
+                    <div className="col-span-2 text-right text-[#ef6a57]">-$150.00</div>
+                    <div className="col-span-2 text-right text-[#4cc38a]">$150.00</div>
                   </div>
                 </div>
 
                 {/* Table Footer Summary */}
                 <div className="grid grid-cols-12 text-xs font-mono font-bold pt-4 mt-6 border-t border-[#24211d] text-white">
-                  <div className="col-span-6 pl-4 text-[#8c857b]">Total 12 lines</div>
-                  <div className="col-span-2 text-right">$4.82K</div>
-                  <div className="col-span-2 text-right text-[#ef6a57]">-$2.09K</div>
-                  <div className="col-span-2 text-right text-[#4cc38a]">$4.05K</div>
+                  <div className="col-span-6 pl-4 text-[#8c857b]">Total Categorized Budget</div>
+                  <div className="col-span-2 text-right">$3,230.00</div>
+                  <div className="col-span-2 text-right text-[#ef6a57]">-$2,120.00</div>
+                  <div className="col-span-2 text-right text-[#4cc38a]">+$1,110.00</div>
                 </div>
               </div>
             </div>
@@ -1045,13 +1040,13 @@ export const LandingPage: React.FC = () => {
                 </div>
                 <ul className="text-xs space-y-2 text-[#8c857b]">
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 size={13} className="text-[#4cc38a]" /> Add, edit & delete personal data
+                    <CheckCircle2 size={13} className="text-[#4cc38a]" /> Add, edit &amp; delete personal data
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={13} className="text-[#4cc38a]" /> Automatic cache invalidation
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 size={13} className="text-[#4cc38a]" /> Interactive charts & filters
+                    <CheckCircle2 size={13} className="text-[#4cc38a]" /> Interactive charts &amp; filters
                   </li>
                 </ul>
               </div>
@@ -1084,7 +1079,7 @@ export const LandingPage: React.FC = () => {
                 </div>
                 <ul className="text-xs space-y-2 text-[#8c857b]">
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 size={13} className="text-amber-400" /> View transactions & analytics
+                    <CheckCircle2 size={13} className="text-amber-400" /> View transactions &amp; analytics
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={13} className="text-amber-400" /> Form buttons visually disabled
