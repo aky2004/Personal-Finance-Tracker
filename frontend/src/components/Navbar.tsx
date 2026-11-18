@@ -1,17 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { Sun, Moon, LogOut, Wallet, Shield, User as UserIcon, Eye } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
-  const { user, logout, isReadOnly, isAdmin } = useAuth();
+  const { user, logout, isReadOnly, isAdmin, isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
   return (
     <header className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+        <Link to={isAuthenticated ? "/dashboard" : "/"} className="flex items-center gap-3 group">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
             <Wallet size={20} />
           </div>
           <div>
@@ -22,7 +23,7 @@ export const Navbar: React.FC = () => {
               v1.0
             </span>
           </div>
-        </div>
+        </Link>
 
         <div className="flex items-center gap-3">
           {/* User Role Badge */}

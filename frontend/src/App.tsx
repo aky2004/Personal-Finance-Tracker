@@ -7,6 +7,7 @@ import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
 
 // Assignment requirement: Use React.lazy() for route-based code splitting
+const LandingPage = lazy(() => import('./pages/LandingPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const TransactionsPage = lazy(() => import('./pages/TransactionsPage'));
 const AdminUsersPage = lazy(() => import('./pages/AdminUsersPage'));
@@ -40,14 +41,17 @@ export const App: React.FC = () => {
         <BrowserRouter>
           <Suspense fallback={<PageFallback />}>
             <Routes>
-              {/* Public Routes */}
+              {/* Modern Public Landing Page as Default Root Route */}
+              <Route path="/" element={<LandingPage />} />
+
+              {/* Public Auth Routes */}
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
 
               {/* Protected Routes for Authenticated Users */}
               <Route element={<ProtectedRoute />}>
                 <Route
-                  path="/"
+                  path="/dashboard"
                   element={
                     <AppLayout>
                       <DashboardPage />
@@ -76,7 +80,7 @@ export const App: React.FC = () => {
                 />
               </Route>
 
-              {/* Catch all fallback */}
+              {/* Catch all fallback redirects to landing */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>

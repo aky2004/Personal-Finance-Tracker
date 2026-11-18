@@ -29,7 +29,7 @@ export const Sidebar: React.FC = () => {
         )}
 
         <nav className="space-y-1">
-          <NavLink to="/" end className={navClass}>
+          <NavLink to="/dashboard" className={navClass}>
             <LayoutDashboard size={18} />
             <span>Dashboard</span>
           </NavLink>
