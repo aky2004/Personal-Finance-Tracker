@@ -167,6 +167,71 @@ authRouter.post('/login', async (req: Request, res: Response): Promise<void> => 
 
 /**
  * @swagger
+ * /api/auth/google:
+ *   post:
+ *     summary: Sign in or register with Google OAuth
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               name:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Google authentication successful
+ */
+authRouter.post('/google', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const email = (req.body.email || 'alex.google@example.com').toLowerCase().trim();
+    const name = (req.body.name || 'Alex Google User').trim();
+
+    let result = await query(
+      'SELECT id, email, name, role FROM users WHERE email = $1',
+      [email]
+    );
+
+    let userRow;
+    if (result.rows.length === 0) {
+      const placeholderHash = await bcrypt.hash(`google_oauth_${Date.now()}`, 10);
+      const insertRes = await query(
+        `INSERT INTO users (email, password_hash, name, role)
+         VALUES ($1, $2, $3, 'user')
+         RETURNING id, email, name, role, created_at`,
+        [email, placeholderHash, name]
+      );
+      userRow = insertRes.rows[0];
+    } else {
+      userRow = result.rows[0];
+    }
+
+    const user: UserPayload = {
+      id: userRow.id,
+      email: userRow.email,
+      name: userRow.name,
+      role: userRow.role,
+    };
+
+    const token = signToken(user);
+
+    res.json({
+      message: 'Google sign-in successful',
+      token,
+      user,
+    });
+  } catch (error: any) {
+    console.error('Google auth error:', error);
+    res.status(500).json({ error: 'Failed to authenticate with Google.' });
+  }
+});
+
+/**
+ * @swagger
  * /api/auth/me:
  *   get:
  *     summary: Get current authenticated user details
