@@ -873,75 +873,56 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 6. Professional Enterprise Footer */}
-      <footer className="border-t border-[#24211d] bg-[#0b0908] pt-16 pb-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          {/* Top Row: Brand & Live Health Status */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-12 border-b border-[#24211d]">
-            <div className="space-y-3 max-w-md">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#7355be] to-[#9376de] flex items-center justify-center text-white font-black text-sm shadow-md shadow-[#7355be]/30">
-                  M
-                </div>
-                <span className="font-extrabold text-lg tracking-tight text-white">
-                  Money<span className="text-[#9376de]">Matter</span>
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1a1714] text-[#8c857b] border border-[#24211d]">
-                  v1.0.0
-                </span>
+      {/* 6. Standard Compact Enterprise Footer */}
+      <footer className="border-t border-[#24211d] bg-[#0b0908] py-8 sm:py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-7">
+          {/* Top Row: Brand & Live System Status */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#24211d]">
+            <div className="flex items-center gap-3">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#7355be] to-[#9376de] flex items-center justify-center text-white font-black text-xs shadow-md shadow-[#7355be]/30">
+                M
               </div>
-              <p className="text-xs text-[#8c857b] leading-relaxed">
-                Enterprise-grade personal wealth and financial management platform. Engineered with React 18, Node.js Express, PostgreSQL relational storage, and sub-millisecond Redis caching.
-              </p>
+              <span className="font-extrabold text-sm tracking-tight text-white">
+                Money<span className="text-[#9376de]">Matter</span>
+              </span>
+              <span className="text-[#8c857b] text-xs hidden sm:inline">•</span>
+              <span className="text-xs text-[#8c857b]">Full-Stack Personal Finance Tracker</span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#141210] border border-[#24211d] text-xs font-mono">
-                <span className="w-2 h-2 rounded-full bg-[#4cc38a] animate-pulse" />
+            <div className="flex items-center gap-3">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#141210] border border-[#24211d] text-[11px] font-mono text-[#8c857b]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4cc38a] animate-pulse" />
                 <span className="text-white">API Online</span>
-                <span className="text-[#8c857b]">•</span>
-                <span className="text-[#8c857b]">PostgreSQL 15</span>
-                <span className="text-[#8c857b]">•</span>
+                <span>•</span>
                 <span className="text-[#9376de]">Redis Active</span>
               </div>
-
               <a
                 href="http://localhost:5001/api/health"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1a1714] hover:bg-[#24211d] border border-[#24211d] text-xs font-semibold text-[#8c857b] hover:text-white transition-colors"
+                className="text-[11px] font-mono text-[#8c857b] hover:text-white flex items-center gap-1 transition-colors"
               >
-                <span>Health Endpoint</span>
-                <ExternalLink size={11} />
+                <span>/api/health</span>
+                <ExternalLink size={10} />
               </a>
             </div>
           </div>
 
-          {/* 4-Column Professional Navigation Directory */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
-            {/* Column 1: Core Capabilities */}
-            <div className="space-y-3">
+          {/* Compact 4-Column Directory (Standard 3 rows per column) */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-xs">
+            {/* Column 1: Core Navigation */}
+            <div className="space-y-2.5">
               <div className="font-bold text-white uppercase tracking-wider text-[11px]">Platform</div>
-              <ul className="space-y-2 text-[#8c857b]">
+              <ul className="space-y-1.5 text-[#8c857b]">
                 <li>
                   <Link to={isAuthenticated ? '/dashboard' : '/login'} className="hover:text-white transition-colors">
-                    Real-time Dashboard
+                    Dashboard
                   </Link>
                 </li>
                 <li>
                   <Link to={isAuthenticated ? '/transactions' : '/login'} className="hover:text-white transition-colors">
                     Transactions Ledger
                   </Link>
-                </li>
-                <li>
-                  <a href="#how-it-works" className="hover:text-white transition-colors">
-                    Processing Architecture
-                  </a>
-                </li>
-                <li>
-                  <a href="#automation" className="hover:text-white transition-colors">
-                    Automated Invalidation
-                  </a>
                 </li>
                 <li>
                   <a href="#faq" className="hover:text-white transition-colors">
@@ -952,12 +933,12 @@ export const LandingPage: React.FC = () => {
             </div>
 
             {/* Column 2: Developer & Specs */}
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               <div className="font-bold text-white uppercase tracking-wider text-[11px]">Documentation</div>
-              <ul className="space-y-2 text-[#8c857b]">
+              <ul className="space-y-1.5 text-[#8c857b]">
                 <li>
                   <Link to="/docs" className="hover:text-white transition-colors">
-                    Architecture Docs
+                    Docs &amp; Architecture
                   </Link>
                 </li>
                 <li>
@@ -967,47 +948,26 @@ export const LandingPage: React.FC = () => {
                     rel="noopener noreferrer"
                     className="hover:text-white flex items-center gap-1 transition-colors"
                   >
-                    <span>Swagger OpenAPI 3.0</span>
+                    <span>Swagger OpenAPI</span>
                     <ExternalLink size={10} />
                   </a>
                 </li>
                 <li>
                   <Link to="/docs" className="hover:text-white transition-colors">
-                    RBAC Security Matrix
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/docs" className="hover:text-white transition-colors">
-                    Redis Caching TTL (15m/1h)
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/docs" className="hover:text-white transition-colors">
-                    Rate Limit Thresholds
+                    RBAC &amp; Rate Limits
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Column 3: Help & Community */}
-            <div className="space-y-3">
+            {/* Column 3: Support */}
+            <div className="space-y-2.5">
               <div className="font-bold text-white uppercase tracking-wider text-[11px]">Support</div>
-              <ul className="space-y-2 text-[#8c857b]">
+              <ul className="space-y-1.5 text-[#8c857b]">
                 <li>
                   <Link to="/contact" className="hover:text-white transition-colors">
-                    Help &amp; Support Center
+                    Help Center &amp; Contact
                   </Link>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/aky2004/Personal-Finance-Tracker/issues"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-white flex items-center gap-1 transition-colors"
-                  >
-                    <span>Bug Report &amp; Issues</span>
-                    <ExternalLink size={10} />
-                  </a>
                 </li>
                 <li>
                   <a
@@ -1021,61 +981,45 @@ export const LandingPage: React.FC = () => {
                   </a>
                 </li>
                 <li>
-                  <Link to="/contact" className="hover:text-white transition-colors">
-                    Feature Requests
-                  </Link>
+                  <a
+                    href="https://github.com/aky2004/Personal-Finance-Tracker/issues"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white flex items-center gap-1 transition-colors"
+                  >
+                    <span>Report an Issue</span>
+                    <ExternalLink size={10} />
+                  </a>
                 </li>
               </ul>
             </div>
 
-            {/* Column 4: Quick Demo Access */}
-            <div className="space-y-3">
-              <div className="font-bold text-white uppercase tracking-wider text-[11px]">Instant Demo Roles</div>
-              <div className="p-3.5 rounded-xl bg-[#141210] border border-[#24211d] space-y-2 font-mono text-[11px]">
+            {/* Column 4: Quick Demo Sign-in */}
+            <div className="space-y-2.5">
+              <div className="font-bold text-white uppercase tracking-wider text-[11px]">Demo Launch</div>
+              <div className="flex flex-col gap-1.5 font-mono text-[11px]">
                 <button
                   onClick={() => handleQuickDemoLogin('admin@finance.com', 'AdminPassword123!')}
-                  className="w-full text-left flex items-center justify-between text-[#8c857b] hover:text-white transition-colors"
+                  className="text-left text-[#8c857b] hover:text-white flex items-center justify-between transition-colors"
                 >
                   <span className="text-purple-400 font-bold">Admin</span>
-                  <span>Launch ↗</span>
+                  <span>Login ↗</span>
                 </button>
                 <button
                   onClick={() => handleQuickDemoLogin('user@finance.com', 'UserPassword123!')}
-                  className="w-full text-left flex items-center justify-between text-[#8c857b] hover:text-white transition-colors"
+                  className="text-left text-[#8c857b] hover:text-white flex items-center justify-between transition-colors"
                 >
-                  <span className="text-[#4cc38a] font-bold">Standard</span>
-                  <span>Launch ↗</span>
+                  <span className="text-[#4cc38a] font-bold">Standard User</span>
+                  <span>Login ↗</span>
                 </button>
                 <button
                   onClick={() => handleQuickDemoLogin('readonly@finance.com', 'ReadOnlyPassword123!')}
-                  className="w-full text-left flex items-center justify-between text-[#8c857b] hover:text-white transition-colors"
+                  className="text-left text-[#8c857b] hover:text-white flex items-center justify-between transition-colors"
                 >
                   <span className="text-amber-400 font-bold">Read-Only</span>
-                  <span>Launch ↗</span>
+                  <span>Login ↗</span>
                 </button>
               </div>
-            </div>
-          </div>
-
-          {/* Bottom Row: Copyright & Spec Compliance Badges */}
-          <div className="pt-8 border-t border-[#24211d] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#8c857b]">
-            <div className="flex items-center gap-3">
-              <span>&copy; {new Date().getFullYear()} MoneyMatter. Built for TechBridge Assignment.</span>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3 font-mono text-[11px]">
-              <span className="px-2 py-0.5 rounded bg-[#141210] border border-[#24211d] text-[#8c857b]">
-                React 18
-              </span>
-              <span className="px-2 py-0.5 rounded bg-[#141210] border border-[#24211d] text-[#8c857b]">
-                Express.js
-              </span>
-              <span className="px-2 py-0.5 rounded bg-[#141210] border border-[#24211d] text-[#8c857b]">
-                PostgreSQL
-              </span>
-              <span className="px-2 py-0.5 rounded bg-[#141210] border border-[#24211d] text-[#9376de]">
-                Redis Caching
-              </span>
             </div>
           </div>
         </div>
