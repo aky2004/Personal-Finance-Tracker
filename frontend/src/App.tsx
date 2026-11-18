@@ -26,12 +26,12 @@ const PageFallback: React.FC = () => (
 // MoneyMatter Full Height Docked Shell Layout
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className="flex h-screen overflow-hidden bg-surface-light dark:bg-surface-dark text-ink-light dark:text-ink-dark transition-colors duration-200">
+    <div className="flex h-screen overflow-hidden bg-[#0b0908] text-[#f2efe9] selection:bg-[#7355be] selection:text-white font-sans transition-colors duration-200">
       {/* Docked Left Sidebar */}
       <Sidebar />
 
       {/* Main Scrollable Canvas */}
-      <div className="flex-1 flex flex-col h-screen overflow-y-auto min-w-0">
+      <div className="flex-1 flex flex-col h-screen overflow-y-auto min-w-0 bg-[#0b0908]">
         <Navbar />
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
           {children}

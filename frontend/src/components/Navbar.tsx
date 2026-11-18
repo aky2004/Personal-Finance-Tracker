@@ -3,48 +3,49 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import {
-  Wallet,
   Sun,
   Moon,
   LogOut,
-  Zap,
   Shield,
   User as UserIcon,
   Eye,
-  Plus,
+  Database,
+  ExternalLink,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
-  const { user, logout, isReadOnly, isAdmin, isAuthenticated } = useAuth();
+  const { user, logout, isReadOnly, isAdmin } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
 
   // Determine active section name for MoneyMatter breadcrumb header
   const getSectionTitle = () => {
-    if (location.pathname.startsWith('/transactions')) return 'Transactions';
-    if (location.pathname.startsWith('/admin/users')) return 'User Management';
+    if (location.pathname.startsWith('/transactions')) return 'Transactions Ledger';
+    if (location.pathname.startsWith('/admin/users')) return 'User Administration';
+    if (location.pathname.startsWith('/docs')) return 'Technical Documentation';
+    if (location.pathname.startsWith('/contact')) return 'Help & Support';
     return 'Dashboard & Cash Flow';
   };
 
   return (
-    <header className="sticky top-0 z-30 h-14 bg-panel-light/85 dark:bg-panel-dark/85 backdrop-blur-md border-b border-borderline-light dark:border-borderline-dark px-4 sm:px-6 flex items-center justify-between transition-colors">
+    <header className="sticky top-0 z-30 h-16 bg-[#0b0908]/90 backdrop-blur-md border-b border-[#24211d] px-4 sm:px-8 flex items-center justify-between transition-colors">
       {/* Left: Mobile Logo & Desktop Breadcrumb */}
       <div className="flex items-center gap-3">
         {/* Mobile brand indicator */}
         <Link to="/dashboard" className="md:hidden flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-brand text-white flex items-center justify-center font-bold">
-            <Wallet size={16} />
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#7355be] to-[#9376de] text-white flex items-center justify-center font-black text-xs shadow-md shadow-[#7355be]/30">
+            M
           </div>
-          <span className="font-bold text-sm tracking-tight text-ink-light dark:text-ink-dark">
-            Money<span className="text-brand dark:text-brand-dark">Matter</span>
+          <span className="font-extrabold text-sm tracking-tight text-white">
+            Money<span className="text-[#9376de]">Matter</span>
           </span>
         </Link>
 
         {/* Desktop Breadcrumb */}
-        <div className="hidden md:flex items-center gap-2 text-xs font-semibold text-ink-muted dark:text-ink-darkmuted">
-          <span>Overview</span>
+        <div className="hidden md:flex items-center gap-2 text-xs font-semibold text-[#8c857b]">
+          <span>App</span>
           <span>/</span>
-          <span className="text-ink-light dark:text-ink-dark font-bold">
+          <span className="text-white font-bold">
             {getSectionTitle()}
           </span>
         </div>
@@ -52,18 +53,26 @@ export const Navbar: React.FC = () => {
 
       {/* Right: Telemetry & Actions */}
       <div className="flex items-center gap-3">
+        {/* Live System Indicator */}
+        <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#141210] border border-[#24211d] text-[11px] font-mono text-[#8c857b]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#4cc38a] animate-pulse" />
+          <span className="text-white">PostgreSQL ACID</span>
+          <span>•</span>
+          <span className="text-[#9376de]">Redis Active</span>
+        </div>
+
         {/* Role Pill */}
         {user && (
           <span
-            className={`hidden sm:inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+            className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${
               isAdmin
-                ? 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-800'
+                ? 'bg-purple-950/40 text-purple-300 border-purple-800/60'
                 : isReadOnly
-                ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800'
-                : 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800'
+                ? 'bg-amber-950/40 text-amber-300 border-amber-800/60'
+                : 'bg-emerald-950/40 text-[#4cc38a] border-emerald-800/60'
             }`}
           >
-            {isAdmin ? <Shield size={10} /> : isReadOnly ? <Eye size={10} /> : <UserIcon size={10} />}
+            {isAdmin ? <Shield size={11} /> : isReadOnly ? <Eye size={11} /> : <UserIcon size={11} />}
             <span>{user.role}</span>
           </span>
         )}
@@ -72,7 +81,7 @@ export const Navbar: React.FC = () => {
         <button
           onClick={toggleTheme}
           aria-label="Toggle Theme"
-          className="md:hidden p-1.5 rounded-lg text-ink-muted dark:text-ink-darkmuted hover:bg-soft-light dark:hover:bg-soft-dark transition-colors"
+          className="md:hidden p-2 rounded-xl text-[#8c857b] hover:text-white hover:bg-[#1a1714] transition-colors"
         >
           {theme === 'dark' ? <Sun size={16} className="text-amber-400" /> : <Moon size={16} />}
         </button>
@@ -81,7 +90,7 @@ export const Navbar: React.FC = () => {
         <button
           onClick={logout}
           aria-label="Logout"
-          className="md:hidden p-1.5 rounded-lg text-money-red dark:text-money-reddark hover:bg-soft-light dark:hover:bg-soft-dark transition-colors"
+          className="md:hidden p-2 rounded-xl text-[#ef6a57] hover:bg-[#1a1714] transition-colors"
         >
           <LogOut size={16} />
         </button>

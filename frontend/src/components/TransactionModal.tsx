@@ -103,37 +103,38 @@ export const TransactionModal: React.FC<Props> = memo(({
   const filteredCategories = categories.filter((c) => c.type === type);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink-light/50 dark:bg-black/70 backdrop-blur-sm animate-fade-in">
-      <div className="bg-panel-light dark:bg-panel-dark border border-borderline-light dark:border-borderline-dark rounded-2xl w-full max-w-md overflow-hidden shadow-moneymatter dark:shadow-moneymatter-dark">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-borderline-light dark:border-borderline-dark">
-          <h3 className="font-bold text-base text-ink-light dark:text-ink-dark">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-md rounded-3xl bg-[#141210] border border-[#24211d] p-7 shadow-2xl overflow-hidden">
+        {/* Modal Header */}
+        <div className="flex items-center justify-between pb-4 border-b border-[#24211d] mb-5">
+          <h3 className="font-extrabold text-lg text-white">
             {transactionToEdit ? 'Edit Transaction' : 'Record Transaction'}
           </h3>
           <button
             onClick={onClose}
-            className="text-ink-muted hover:text-ink-light dark:hover:text-ink-dark p-1 rounded-lg"
+            className="text-[#8c857b] hover:text-white p-1.5 rounded-xl hover:bg-[#1a1714] transition-colors"
           >
-            <X size={16} />
+            <X size={18} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="p-3 bg-rose-50 border border-rose-200 text-money-red dark:bg-rose-950/40 dark:border-rose-900 dark:text-money-reddark rounded-xl text-xs font-medium">
+            <div className="p-3 bg-[#ef6a57]/10 border border-[#ef6a57]/30 text-[#ef6a57] rounded-xl text-xs font-medium text-center">
               {error}
             </div>
           )}
 
           {/* Type Toggle */}
-          <div className="grid grid-cols-2 gap-1.5 bg-soft-light dark:bg-soft-dark p-1 rounded-xl">
+          <div className="grid grid-cols-2 gap-2 bg-[#0e0c0a] border border-[#24211d] p-1 rounded-xl">
             <button
               type="button"
               disabled={isReadOnly}
               onClick={() => handleTypeChange('expense')}
               className={`py-2 text-xs font-bold rounded-lg transition-all ${
                 type === 'expense'
-                  ? 'bg-money-red text-white shadow-xs'
-                  : 'text-ink-muted hover:text-ink-light dark:hover:text-ink-dark'
+                  ? 'bg-[#ef6a57] text-white shadow-xs'
+                  : 'text-[#8c857b] hover:text-white'
               }`}
             >
               Expense
@@ -144,8 +145,8 @@ export const TransactionModal: React.FC<Props> = memo(({
               onClick={() => handleTypeChange('income')}
               className={`py-2 text-xs font-bold rounded-lg transition-all ${
                 type === 'income'
-                  ? 'bg-money-green text-white shadow-xs'
-                  : 'text-ink-muted hover:text-ink-light dark:hover:text-ink-dark'
+                  ? 'bg-[#4cc38a] text-black font-extrabold shadow-xs'
+                  : 'text-[#8c857b] hover:text-white'
               }`}
             >
               Income
@@ -153,12 +154,12 @@ export const TransactionModal: React.FC<Props> = memo(({
           </div>
 
           {/* Amount */}
-          <div>
-            <label className="block text-xs font-bold text-ink-light dark:text-ink-dark mb-1">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-[#8c857b]">
               Amount ($)
             </label>
             <div className="relative">
-              <DollarSign size={15} className="absolute left-3 top-3 text-ink-muted" />
+              <DollarSign size={15} className="absolute left-3.5 top-3 text-[#8c857b]" />
               <input
                 type="number"
                 step="0.01"
@@ -168,23 +169,23 @@ export const TransactionModal: React.FC<Props> = memo(({
                 value={amount}
                 onChange={handleAmountChange}
                 placeholder="0.00"
-                className="w-full pl-9 pr-3 py-2 bg-soft-light dark:bg-soft-dark border border-borderline-light dark:border-borderline-dark rounded-xl text-xs font-mono font-semibold focus:ring-1 focus:ring-brand focus:outline-none"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-[#0e0c0a] border border-[#24211d] rounded-xl text-xs font-mono font-bold text-white placeholder-[#524b42] focus:outline-none focus:border-[#7355be] transition-colors"
               />
             </div>
           </div>
 
           {/* Category */}
-          <div>
-            <label className="block text-xs font-bold text-ink-light dark:text-ink-dark mb-1">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-[#8c857b]">
               Category
             </label>
             <div className="relative">
-              <Tag size={15} className="absolute left-3 top-3 text-ink-muted" />
+              <Tag size={15} className="absolute left-3.5 top-3 text-[#8c857b]" />
               <select
                 disabled={isReadOnly}
                 value={categoryId}
                 onChange={handleCategoryChange}
-                className="w-full pl-9 pr-3 py-2 bg-soft-light dark:bg-soft-dark border border-borderline-light dark:border-borderline-dark rounded-xl text-xs focus:ring-1 focus:ring-brand focus:outline-none"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-[#0e0c0a] border border-[#24211d] rounded-xl text-xs text-white focus:outline-none focus:border-[#7355be] transition-colors"
               >
                 <option value="">Select Category (Optional)</option>
                 {filteredCategories.map((c) => (
@@ -197,57 +198,57 @@ export const TransactionModal: React.FC<Props> = memo(({
           </div>
 
           {/* Date */}
-          <div>
-            <label className="block text-xs font-bold text-ink-light dark:text-ink-dark mb-1">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-[#8c857b]">
               Date
             </label>
             <div className="relative">
-              <Calendar size={15} className="absolute left-3 top-3 text-ink-muted" />
+              <Calendar size={15} className="absolute left-3.5 top-3 text-[#8c857b]" />
               <input
                 type="date"
                 required
                 disabled={isReadOnly}
                 value={date}
                 onChange={handleDateChange}
-                className="w-full pl-9 pr-3 py-2 bg-soft-light dark:bg-soft-dark border border-borderline-light dark:border-borderline-dark rounded-xl text-xs font-mono focus:ring-1 focus:ring-brand focus:outline-none"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-[#0e0c0a] border border-[#24211d] rounded-xl text-xs font-mono text-white focus:outline-none focus:border-[#7355be] transition-colors"
               />
             </div>
           </div>
 
           {/* Description */}
-          <div>
-            <label className="block text-xs font-bold text-ink-light dark:text-ink-dark mb-1">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-[#8c857b]">
               Description
             </label>
             <div className="relative">
-              <FileText size={15} className="absolute left-3 top-3 text-ink-muted" />
+              <FileText size={15} className="absolute left-3.5 top-3 text-[#8c857b]" />
               <input
                 type="text"
                 disabled={isReadOnly}
                 value={description}
                 onChange={handleDescriptionChange}
                 placeholder="e.g. Groceries at Trader Joe's"
-                className="w-full pl-9 pr-3 py-2 bg-soft-light dark:bg-soft-dark border border-borderline-light dark:border-borderline-dark rounded-xl text-xs focus:ring-1 focus:ring-brand focus:outline-none"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-[#0e0c0a] border border-[#24211d] rounded-xl text-xs text-white placeholder-[#524b42] focus:outline-none focus:border-[#7355be] transition-colors"
               />
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-borderline-light dark:border-borderline-dark">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#24211d]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-ink-muted hover:bg-soft-light dark:hover:bg-soft-dark rounded-xl"
+              className="px-4 py-2 text-xs font-semibold text-[#8c857b] hover:text-white hover:bg-[#1a1714] rounded-xl transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isReadOnly || loading}
-              className={`px-5 py-2 text-xs font-bold rounded-xl text-white shadow-xs transition-all ${
+              className={`px-5 py-2.5 text-xs font-bold rounded-xl text-white shadow-md shadow-[#7355be]/20 transition-all ${
                 isReadOnly
-                  ? 'bg-slate-400 cursor-not-allowed opacity-50'
-                  : 'bg-brand hover:bg-brand-hover'
+                  ? 'bg-[#1a1714] text-[#8c857b] cursor-not-allowed opacity-50'
+                  : 'bg-[#7355be] hover:bg-[#8365ce] active:scale-[0.99]'
               }`}
             >
               {loading ? 'Saving...' : transactionToEdit ? 'Save Changes' : 'Confirm'}

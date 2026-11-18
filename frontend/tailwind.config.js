@@ -26,21 +26,21 @@ export default {
         },
         panel: {
           light: '#ffffff',
-          dark: '#1b1917',
+          dark: '#141210',
         },
         soft: {
           light: '#f3f2f7',
-          dark: '#282624',
+          dark: '#1a1714',
         },
         borderline: {
           light: '#e6e5ee',
-          dark: '#2c2825',
+          dark: '#24211d',
         },
         ink: {
           light: '#17151f',
           muted: '#66637a',
-          dark: '#f5f3f0',
-          darkmuted: '#a1a1aa',
+          dark: '#f2efe9',
+          darkmuted: '#8c857b',
         },
         money: {
           green: '#1b7f4d',

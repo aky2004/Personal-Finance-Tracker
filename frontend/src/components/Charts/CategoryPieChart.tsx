@@ -46,9 +46,9 @@ export const CategoryPieChart: React.FC<Props> = memo(({ data }) => {
     if (active && payload && payload.length) {
       const entry = payload[0];
       return (
-        <div className="bg-panel-light dark:bg-panel-dark text-ink-light dark:text-ink-dark text-xs rounded-xl px-3 py-2 shadow-moneymatter dark:shadow-moneymatter-dark border border-borderline-light dark:border-borderline-dark">
-          <p className="font-semibold">{entry.name}</p>
-          <p className="text-brand dark:text-brand-dark font-mono font-bold mt-0.5">
+        <div className="bg-[#141210] text-[#f2efe9] text-xs rounded-xl px-3 py-2 shadow-2xl border border-[#24211d]">
+          <p className="font-semibold text-white">{entry.name}</p>
+          <p className="text-[#9376de] font-mono font-bold mt-0.5">
             ${entry.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
         </div>

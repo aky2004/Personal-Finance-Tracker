@@ -27,8 +27,8 @@ export const IncomeExpenseBarChart: React.FC<Props> = memo(({ data }) => {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-panel-light dark:bg-panel-dark text-ink-light dark:text-ink-dark text-xs rounded-xl p-3 shadow-moneymatter dark:shadow-moneymatter-dark border border-borderline-light dark:border-borderline-dark">
-          <p className="font-semibold mb-1 text-ink-muted dark:text-ink-darkmuted">{label}</p>
+        <div className="bg-[#141210] text-[#f2efe9] text-xs rounded-xl p-3 shadow-2xl border border-[#24211d]">
+          <p className="font-semibold mb-1 text-[#8c857b]">{label}</p>
           {payload.map((entry: any, index: number) => (
             <p key={`bar-${index}`} className="flex justify-between gap-4 font-mono font-medium" style={{ color: entry.fill }}>
               <span>{entry.name}:</span>
@@ -45,16 +45,16 @@ export const IncomeExpenseBarChart: React.FC<Props> = memo(({ data }) => {
     <div className="w-full h-72">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 10, right: 15, left: -10, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e6e5ee" className="dark:stroke-borderline-dark/60" opacity={0.6} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#24211d" opacity={0.8} />
           <XAxis
             dataKey="display_name"
-            tick={{ fill: '#66637a', fontSize: 10, fontFamily: 'Manrope' }}
-            axisLine={{ stroke: '#e6e5ee' }}
+            tick={{ fill: '#8c857b', fontSize: 10, fontFamily: 'Manrope' }}
+            axisLine={{ stroke: '#24211d' }}
             tickLine={false}
           />
           <YAxis
-            tick={{ fill: '#66637a', fontSize: 10, fontFamily: 'JetBrains Mono' }}
-            axisLine={{ stroke: '#e6e5ee' }}
+            tick={{ fill: '#8c857b', fontSize: 10, fontFamily: 'JetBrains Mono' }}
+            axisLine={{ stroke: '#24211d' }}
             tickLine={false}
             tickFormatter={(val) => `$${val}`}
           />
@@ -63,13 +63,13 @@ export const IncomeExpenseBarChart: React.FC<Props> = memo(({ data }) => {
             verticalAlign="bottom"
             height={36}
             formatter={(value) => (
-              <span className="text-[11px] text-ink-muted dark:text-ink-darkmuted font-medium">
+              <span className="text-[11px] text-[#8c857b] font-medium">
                 {value}
               </span>
             )}
           />
-          <Bar dataKey="income" name="Income" fill="#1b7f4d" radius={[5, 5, 0, 0]} />
-          <Bar dataKey="expense" name="Expense" fill="#c24129" radius={[5, 5, 0, 0]} />
+          <Bar dataKey="income" name="Income" fill="#4cc38a" radius={[6, 6, 0, 0]} />
+          <Bar dataKey="expense" name="Expense" fill="#ef6a57" radius={[6, 6, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

@@ -14,7 +14,7 @@ interface Props {
 export const VirtualTransactionList: React.FC<Props> = memo(({
   transactions,
   itemHeight = 68,
-  height = 520,
+  height = 540,
   isReadOnly,
   onEdit,
   onDelete,
@@ -45,18 +45,18 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
 
   if (totalCount === 0) {
     return (
-      <div className="h-64 flex flex-col items-center justify-center text-ink-muted dark:text-ink-darkmuted">
+      <div className="h-64 flex flex-col items-center justify-center text-[#8c857b] bg-[#141210] border border-[#24211d] rounded-2xl">
         <p className="text-xs">No transactions match your current filters</p>
       </div>
     );
   }
 
   return (
-    <div className="border border-borderline-light dark:border-borderline-dark rounded-2xl overflow-hidden bg-panel-light dark:bg-panel-dark shadow-moneymatter dark:shadow-moneymatter-dark">
-      <div className="px-5 py-3 bg-soft-light dark:bg-soft-dark border-b border-borderline-light dark:border-borderline-dark flex justify-between items-center text-xs font-bold text-ink-muted dark:text-ink-darkmuted uppercase tracking-wider">
-        <span>Virtualized Stream ({totalCount.toLocaleString()} total • {visibleTransactions.length} in DOM)</span>
+    <div className="border border-[#24211d] rounded-2xl overflow-hidden bg-[#141210] shadow-2xl">
+      <div className="px-5 py-3.5 bg-[#1a1714] border-b border-[#24211d] flex justify-between items-center text-xs font-bold text-[#8c857b] uppercase tracking-wider">
+        <span>Virtualized Stream ({totalCount.toLocaleString()} total • {visibleTransactions.length} active in DOM at 60 FPS)</span>
         {isReadOnly && (
-          <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-medium normal-case">
+          <span className="flex items-center gap-1.5 text-amber-400 font-semibold normal-case">
             <ShieldAlert size={14} /> Read-Only Mode
           </span>
         )}
@@ -66,7 +66,7 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
         ref={containerRef}
         onScroll={handleScroll}
         style={{ height, overflowY: 'auto', position: 'relative' }}
-        className="divide-y divide-borderline-light/60 dark:divide-borderline-dark/60"
+        className="divide-y divide-[#24211d]"
       >
         <div style={{ height: totalHeight, position: 'relative' }}>
           <div
@@ -84,34 +84,35 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
                 <div
                   key={tx.id}
                   style={{ height: itemHeight }}
-                  className="px-5 flex items-center justify-between hover:bg-soft-light/60 dark:hover:bg-soft-dark/40 transition-colors"
+                  className="px-5 flex items-center justify-between hover:bg-[#1a1714]/80 transition-colors"
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
                     <div
-                      className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${
                         isIncome
-                          ? 'bg-emerald-50 text-money-green dark:bg-emerald-950/40 dark:text-money-greendark'
-                          : 'bg-rose-50 text-money-red dark:bg-rose-950/40 dark:text-money-reddark'
+                          ? 'bg-[#4cc38a]/10 text-[#4cc38a] border-[#4cc38a]/20'
+                          : 'bg-[#ef6a57]/10 text-[#ef6a57] border-[#ef6a57]/20'
                       }`}
                     >
                       {isIncome ? <ArrowDownLeft size={17} /> : <ArrowUpRight size={17} />}
                     </div>
 
                     <div className="min-w-0">
-                      <p className="text-xs sm:text-sm font-bold text-ink-light dark:text-ink-dark truncate">
+                      <p className="text-xs sm:text-sm font-bold text-white truncate">
                         {tx.description || (isIncome ? 'Income' : 'Expense')}
                       </p>
-                      <div className="flex items-center gap-2 text-[11px] text-ink-muted dark:text-ink-darkmuted mt-0.5">
+                      <div className="flex items-center gap-2 text-[11px] text-[#8c857b] mt-0.5">
                         <span className="flex items-center gap-1 font-mono">
                           <Calendar size={11} />
                           {tx.date}
                         </span>
                         {tx.category_name && (
                           <span
-                            className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[10px] font-semibold"
+                            className="inline-flex items-center gap-1 px-2 py-0.2 rounded-full text-[10px] font-semibold border"
                             style={{
                               backgroundColor: `${tx.category_color || '#7355be'}15`,
-                              color: tx.category_color || '#7355be',
+                              color: tx.category_color || '#9376de',
+                              borderColor: `${tx.category_color || '#7355be'}35`,
                             }}
                           >
                             <Tag size={9} />
@@ -125,9 +126,7 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
                   <div className="flex items-center gap-4 shrink-0">
                     <span
                       className={`font-mono font-bold text-xs sm:text-sm ${
-                        isIncome
-                          ? 'text-money-green dark:text-money-greendark'
-                          : 'text-money-red dark:text-money-reddark'
+                        isIncome ? 'text-[#4cc38a]' : 'text-[#ef6a57]'
                       }`}
                     >
                       {isIncome ? '+' : '-'}${Number(tx.amount).toFixed(2)}
@@ -140,8 +139,8 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
                         title={isReadOnly ? 'Read-only users cannot edit' : 'Edit Transaction'}
                         className={`p-1.5 rounded-lg transition-colors ${
                           isReadOnly
-                            ? 'opacity-25 cursor-not-allowed text-ink-muted'
-                            : 'text-ink-muted hover:text-brand hover:bg-soft-light dark:hover:bg-soft-dark'
+                            ? 'opacity-25 cursor-not-allowed text-[#8c857b]'
+                            : 'text-[#8c857b] hover:text-[#9376de] hover:bg-[#1a1714]'
                         }`}
                       >
                         <Edit2 size={14} />
@@ -152,8 +151,8 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
                         title={isReadOnly ? 'Read-only users cannot delete' : 'Delete Transaction'}
                         className={`p-1.5 rounded-lg transition-colors ${
                           isReadOnly
-                            ? 'opacity-25 cursor-not-allowed text-ink-muted'
-                            : 'text-ink-muted hover:text-money-red hover:bg-soft-light dark:hover:bg-soft-dark'
+                            ? 'opacity-25 cursor-not-allowed text-[#8c857b]'
+                            : 'text-[#8c857b] hover:text-[#ef6a57] hover:bg-[#1a1714]'
                         }`}
                       >
                         <Trash2 size={14} />

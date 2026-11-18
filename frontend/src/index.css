@@ -20,15 +20,15 @@
 
   :root.dark, .dark {
     --bg: #0b0908;
-    --fg: #f5f3f0;
-    --card: #1b1917;
-    --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 18px 40px -22px rgba(0, 0, 0, 0.8);
-    --border: #2c2825;
-    --muted: #a1a1aa;
-    --soft: #282624;
-    --primary: #9376de;
-    --primary-hover: #a58beb;
-    --primary-text: #b69df2;
+    --fg: #f2efe9;
+    --card: #141210;
+    --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 18px 40px -22px rgba(0, 0, 0, 0.9);
+    --border: #24211d;
+    --muted: #8c857b;
+    --soft: #1a1714;
+    --primary: #7355be;
+    --primary-hover: #8365ce;
+    --primary-text: #9376de;
     --income: #4cc38a;
     --expense: #ef6a57;
   }
