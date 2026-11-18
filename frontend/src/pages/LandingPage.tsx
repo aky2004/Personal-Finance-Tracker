@@ -79,29 +79,15 @@ export const LandingPage: React.FC = () => {
           </div>
 
           <nav className="hidden md:flex items-center gap-8 text-xs font-semibold text-[#8c857b]">
-            <a href="#live-demo" className="hover:text-[#9376de] transition-colors">
-              Live Demo
-            </a>
             <a href="#how-it-works" className="hover:text-[#9376de] transition-colors">
               How It Works
             </a>
-            <a href="#automation" className="hover:text-[#9376de] transition-colors">
-              Automation
-            </a>
             <a href="#plan" className="hover:text-[#9376de] transition-colors">
-              Plan & Budgets
+              Plan &amp; Budgets
             </a>
-            <a href="#rbac" className="hover:text-[#9376de] transition-colors">
-              RBAC Testing
-            </a>
-            <a
-              href="http://localhost:5001/api/docs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 hover:text-[#9376de] transition-colors"
-            >
-              API Docs <ExternalLink size={11} />
-            </a>
+            <Link to="/docs" className="hover:text-[#9376de] transition-colors">
+              Docs
+            </Link>
           </nav>
 
           <div className="flex items-center gap-3">
