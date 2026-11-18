@@ -6,7 +6,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
 
-// Assignment requirement: Use React.lazy() for route-based code splitting
+// Route-based code splitting
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const TransactionsPage = lazy(() => import('./pages/TransactionsPage'));
@@ -14,21 +14,26 @@ const AdminUsersPage = lazy(() => import('./pages/AdminUsersPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 
-// Assignment requirement: Use React.Suspense for loading states
 const PageFallback: React.FC = () => (
   <div className="min-h-[50vh] flex flex-col items-center justify-center gap-3">
-    <div className="w-9 h-9 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-    <p className="text-xs font-semibold text-slate-400">Loading component...</p>
+    <div className="w-8 h-8 border-3 border-brand dark:border-brand-dark border-t-transparent rounded-full animate-spin"></div>
+    <p className="text-xs font-semibold text-ink-muted dark:text-ink-darkmuted">Loading MoneyMatter...</p>
   </div>
 );
 
+// MoneyMatter Full Height Docked Shell Layout
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
-      <Navbar />
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex gap-8">
-        <Sidebar />
-        <main className="flex-1 min-w-0">{children}</main>
+    <div className="flex h-screen overflow-hidden bg-surface-light dark:bg-surface-dark text-ink-light dark:text-ink-dark transition-colors duration-200">
+      {/* Docked Left Sidebar */}
+      <Sidebar />
+
+      {/* Main Scrollable Canvas */}
+      <div className="flex-1 flex flex-col h-screen overflow-y-auto min-w-0">
+        <Navbar />
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+          {children}
+        </main>
       </div>
     </div>
   );
@@ -41,14 +46,14 @@ export const App: React.FC = () => {
         <BrowserRouter>
           <Suspense fallback={<PageFallback />}>
             <Routes>
-              {/* Modern Public Landing Page as Default Root Route */}
+              {/* Public Landing Page */}
               <Route path="/" element={<LandingPage />} />
 
               {/* Public Auth Routes */}
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
 
-              {/* Protected Routes for Authenticated Users */}
+              {/* Protected App Routes */}
               <Route element={<ProtectedRoute />}>
                 <Route
                   path="/dashboard"
@@ -80,7 +85,7 @@ export const App: React.FC = () => {
                 />
               </Route>
 
-              {/* Catch all fallback redirects to landing */}
+              {/* Catch-all fallback to Landing Page */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>

@@ -13,17 +13,25 @@ interface Props {
   data: CategoryBreakdown[];
 }
 
-const DEFAULT_COLORS = [
-  '#f59e0b', '#3b82f6', '#8b5cf6', '#ec4899',
-  '#10b981', '#ef4444', '#06b6d4', '#f97316',
-  '#6366f1', '#84cc16',
+// MoneyMatter signature category palette
+const MONEYMATTER_COLORS = [
+  '#7355be', // Primary Violet
+  '#1b7f4d', // Money Green
+  '#c24129', // Expense Terracotta
+  '#2563eb', // Checking Blue
+  '#f59e0b', // Auto Amber
+  '#06b6d4', // Heloc Cyan
+  '#8b5cf6', // Student Purple
+  '#ec4899', // Medical Pink
+  '#ea580c', // Crypto Orange
+  '#64748b', // Other Slate
 ];
 
 export const CategoryPieChart: React.FC<Props> = memo(({ data }) => {
   if (!data || data.length === 0) {
     return (
-      <div className="h-64 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500">
-        <p className="text-sm">No expense records found for this period</p>
+      <div className="h-64 flex flex-col items-center justify-center text-ink-muted dark:text-ink-darkmuted">
+        <p className="text-xs">No expense records found for this period</p>
       </div>
     );
   }
@@ -31,16 +39,18 @@ export const CategoryPieChart: React.FC<Props> = memo(({ data }) => {
   const chartData = data.map((item, index) => ({
     name: item.category_name,
     value: Number(item.total_amount),
-    color: item.color || DEFAULT_COLORS[index % DEFAULT_COLORS.length],
+    color: item.color || MONEYMATTER_COLORS[index % MONEYMATTER_COLORS.length],
   }));
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const entry = payload[0];
       return (
-        <div className="bg-slate-900 text-white text-xs rounded-lg px-3 py-2 shadow-lg border border-slate-700">
+        <div className="bg-panel-light dark:bg-panel-dark text-ink-light dark:text-ink-dark text-xs rounded-xl px-3 py-2 shadow-moneymatter dark:shadow-moneymatter-dark border border-borderline-light dark:border-borderline-dark">
           <p className="font-semibold">{entry.name}</p>
-          <p className="text-amber-400 font-mono">${entry.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+          <p className="text-brand dark:text-brand-dark font-mono font-bold mt-0.5">
+            ${entry.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </p>
         </div>
       );
     }
@@ -55,20 +65,24 @@ export const CategoryPieChart: React.FC<Props> = memo(({ data }) => {
             data={chartData}
             cx="50%"
             cy="50%"
-            innerRadius={60}
+            innerRadius={65}
             outerRadius={95}
-            paddingAngle={4}
+            paddingAngle={3}
             dataKey="value"
           >
             {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color} stroke="#1e293b" strokeWidth={1} />
+              <Cell key={`cell-${index}`} fill={entry.color} stroke="transparent" />
             ))}
           </Pie>
           <Tooltip content={<CustomTooltip />} />
           <Legend
             verticalAlign="bottom"
             height={36}
-            formatter={(value) => <span className="text-xs text-slate-600 dark:text-slate-300 font-medium">{value}</span>}
+            formatter={(value) => (
+              <span className="text-[11px] text-ink-muted dark:text-ink-darkmuted font-medium">
+                {value}
+              </span>
+            )}
           />
         </PieChart>
       </ResponsiveContainer>

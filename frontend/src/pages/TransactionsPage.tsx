@@ -32,7 +32,6 @@ export const TransactionsPage: React.FC = () => {
     totalPages: 1,
   });
 
-  // Filter States
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<'all' | 'income' | 'expense'>('all');
   const [categoryFilter, setCategoryFilter] = useState('');
@@ -41,22 +40,17 @@ export const TransactionsPage: React.FC = () => {
   const [sortBy, setSortBy] = useState<'date' | 'amount'>('date');
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
 
-  // View mode: Paginated table vs. Virtual Scrolling feed
   const [viewMode, setViewMode] = useState<'table' | 'virtual'>('table');
-
-  // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch categories (cached in Redis for 1 hour)
   useEffect(() => {
     api.get('/categories')
       .then((res) => setCategories(res.data.data))
       .catch((err) => console.error('Failed to load categories:', err));
   }, []);
 
-  // Fetch transactions with pagination, filters, and sorting
   const fetchTransactions = useCallback(async (pageToLoad = 1, customLimit?: number) => {
     setLoading(true);
     try {
@@ -88,12 +82,10 @@ export const TransactionsPage: React.FC = () => {
     fetchTransactions(1);
   }, [fetchTransactions]);
 
-  // Assignment requirement: useMemo for memoized filtered/sorted transactions list
   const clientFilteredList = useMemo(() => {
     return transactions;
   }, [transactions]);
 
-  // Assignment requirement: useMemo for client-side quick summary statistics
   const listStats = useMemo(() => {
     let income = 0;
     let expense = 0;
@@ -105,7 +97,6 @@ export const TransactionsPage: React.FC = () => {
     return { income, expense, balance: income - expense };
   }, [clientFilteredList]);
 
-  // Assignment requirement: useCallback to optimize event handlers
   const handleOpenAddModal = useCallback(() => {
     if (isReadOnly) return;
     setEditingTransaction(null);
@@ -141,115 +132,115 @@ export const TransactionsPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Top Header */}
+      {/* 1. Header Toolbar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-            Transaction Ledger
+          <h1 className="text-xl sm:text-2xl font-black text-ink-light dark:text-ink-dark tracking-tight">
+            Transactions
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Manage your personal income and expense records with full RBAC protection
+          <p className="text-xs text-ink-muted dark:text-ink-darkmuted mt-0.5">
+            Full ledger view with search, categorization, and windowed scrolling
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          {/* View Mode Toggle: Table vs Virtualized List */}
-          <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex items-center text-xs font-semibold">
+          {/* View Mode Toggle */}
+          <div className="bg-soft-light dark:bg-soft-dark p-1 rounded-xl flex items-center text-xs font-semibold">
             <button
               onClick={() => { setViewMode('table'); fetchTransactions(1, 10); }}
               className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
                 viewMode === 'table'
-                  ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400'
+                  ? 'bg-panel-light dark:bg-panel-dark text-brand dark:text-brand-dark shadow-xs font-bold'
+                  : 'text-ink-muted'
               }`}
             >
-              <List size={14} /> Paginated Table
+              <List size={13} /> Table
             </button>
             <button
               onClick={() => { setViewMode('virtual'); fetchTransactions(1, 100); }}
               className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
                 viewMode === 'virtual'
-                  ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400'
+                  ? 'bg-panel-light dark:bg-panel-dark text-brand dark:text-brand-dark shadow-xs font-bold'
+                  : 'text-ink-muted'
               }`}
             >
-              <Sparkles size={14} /> Virtual Scrolling
+              <Sparkles size={13} /> Virtual Feed
             </button>
           </div>
 
-          {/* Add Transaction Button: Disabled with tooltip for read-only users */}
+          {/* Add Transaction Button */}
           <button
             onClick={handleOpenAddModal}
             disabled={isReadOnly}
-            title={isReadOnly ? 'Read-only users cannot add transactions' : 'Add new transaction'}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold shadow-md transition-all ${
+            title={isReadOnly ? 'Read-only users cannot add transactions' : 'New Transaction'}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold shadow-xs transition-all ${
               isReadOnly
-                ? 'bg-slate-300 dark:bg-slate-800 text-slate-400 cursor-not-allowed opacity-60'
-                : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                ? 'bg-slate-300 dark:bg-slate-850 text-slate-400 cursor-not-allowed opacity-60'
+                : 'bg-brand hover:bg-brand-hover text-white'
             }`}
           >
-            <Plus size={16} />
-            <span>Add Transaction</span>
+            <Plus size={15} />
+            <span>New Transaction</span>
           </button>
         </div>
       </div>
 
-      {/* Read-only Alert Bar if active */}
+      {/* Read-only Alert Bar */}
       {isReadOnly && (
-        <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl text-xs text-amber-800 dark:text-amber-300 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <ShieldAlert size={16} className="text-amber-600" />
-            <span>
-              <strong>Read-Only Access:</strong> You are viewing transactions in read-only mode. Form controls, additions, edits, and deletions are disabled per RBAC policy.
-            </span>
-          </div>
+        <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 rounded-xl text-xs text-amber-800 dark:text-amber-300 flex items-center gap-2">
+          <ShieldAlert size={15} className="text-amber-600 dark:text-amber-400 shrink-0" />
+          <span>
+            <strong>Read-Only Mode:</strong> Mutation privileges are locked. Creating, modifying, and deleting transactions are disabled.
+          </span>
         </div>
       )}
 
-      {/* Quick Summary Pill Bar */}
+      {/* Page Flow Summary Bar */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block">Page Total Income</span>
-          <span className="text-base font-extrabold font-mono text-emerald-600 dark:text-emerald-400">
+        <div className="p-3 bg-panel-light dark:bg-panel-dark border border-borderline-light dark:border-borderline-dark rounded-xl shadow-xs">
+          <span className="text-[10px] uppercase font-bold text-ink-muted dark:text-ink-darkmuted block">Inflow</span>
+          <span className="text-sm sm:text-base font-extrabold font-mono text-money-green dark:text-money-greendark">
             +${listStats.income.toFixed(2)}
           </span>
         </div>
-        <div className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block">Page Total Expense</span>
-          <span className="text-base font-extrabold font-mono text-rose-600 dark:text-rose-400">
+        <div className="p-3 bg-panel-light dark:bg-panel-dark border border-borderline-light dark:border-borderline-dark rounded-xl shadow-xs">
+          <span className="text-[10px] uppercase font-bold text-ink-muted dark:text-ink-darkmuted block">Outflow</span>
+          <span className="text-sm sm:text-base font-extrabold font-mono text-money-red dark:text-money-reddark">
             -${listStats.expense.toFixed(2)}
           </span>
         </div>
-        <div className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block">Page Net Cashflow</span>
-          <span className={`text-base font-extrabold font-mono ${listStats.balance >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-rose-600'}`}>
+        <div className="p-3 bg-panel-light dark:bg-panel-dark border border-borderline-light dark:border-borderline-dark rounded-xl shadow-xs">
+          <span className="text-[10px] uppercase font-bold text-ink-muted dark:text-ink-darkmuted block">Net</span>
+          <span className={`text-sm sm:text-base font-extrabold font-mono ${
+            listStats.balance >= 0 ? 'text-money-green dark:text-money-greendark' : 'text-money-red dark:text-money-reddark'
+          }`}>
             ${listStats.balance.toFixed(2)}
           </span>
         </div>
       </div>
 
       {/* Filters Toolbar */}
-      <div className="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm space-y-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          {/* Search bar */}
+      <div className="p-4 bg-panel-light dark:bg-panel-dark border border-borderline-light dark:border-borderline-dark rounded-2xl shadow-moneymatter dark:shadow-moneymatter-dark space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+          {/* Search */}
           <div className="relative">
-            <Search size={15} className="absolute left-3 top-3 text-slate-400" />
+            <Search size={14} className="absolute left-3 top-2.5 text-ink-muted" />
             <input
               type="text"
               placeholder="Search description..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full pl-8 pr-3 py-1.5 bg-soft-light dark:bg-soft-dark border border-borderline-light dark:border-borderline-dark rounded-xl text-xs focus:ring-1 focus:ring-brand focus:outline-none"
             />
           </div>
 
           {/* Type Filter */}
           <div className="relative">
-            <Filter size={15} className="absolute left-3 top-3 text-slate-400" />
+            <Filter size={14} className="absolute left-3 top-2.5 text-ink-muted" />
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value as any)}
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full pl-8 pr-3 py-1.5 bg-soft-light dark:bg-soft-dark border border-borderline-light dark:border-borderline-dark rounded-xl text-xs focus:ring-1 focus:ring-brand focus:outline-none"
             >
               <option value="all">All Types</option>
               <option value="income">Income Only</option>
@@ -259,11 +250,11 @@ export const TransactionsPage: React.FC = () => {
 
           {/* Category Filter */}
           <div className="relative">
-            <Tag size={15} className="absolute left-3 top-3 text-slate-400" />
+            <Tag size={14} className="absolute left-3 top-2.5 text-ink-muted" />
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full pl-8 pr-3 py-1.5 bg-soft-light dark:bg-soft-dark border border-borderline-light dark:border-borderline-dark rounded-xl text-xs focus:ring-1 focus:ring-brand focus:outline-none"
             >
               <option value="">All Categories</option>
               {categories.map((c) => (
@@ -274,40 +265,40 @@ export const TransactionsPage: React.FC = () => {
             </select>
           </div>
 
-          {/* Date Range Start */}
+          {/* Start Date */}
           <div className="relative">
-            <Calendar size={15} className="absolute left-3 top-3 text-slate-400" />
+            <Calendar size={14} className="absolute left-3 top-2.5 text-ink-muted" />
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full pl-8 pr-3 py-1.5 bg-soft-light dark:bg-soft-dark border border-borderline-light dark:border-borderline-dark rounded-xl text-xs font-mono focus:ring-1 focus:ring-brand focus:outline-none"
             />
           </div>
 
-          {/* Date Range End */}
+          {/* End Date */}
           <div className="relative">
-            <Calendar size={15} className="absolute left-3 top-3 text-slate-400" />
+            <Calendar size={14} className="absolute left-3 top-2.5 text-ink-muted" />
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full pl-8 pr-3 py-1.5 bg-soft-light dark:bg-soft-dark border border-borderline-light dark:border-borderline-dark rounded-xl text-xs font-mono focus:ring-1 focus:ring-brand focus:outline-none"
             />
           </div>
         </div>
 
         {/* Sort Controls */}
-        <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex items-center justify-between text-[11px] text-ink-muted dark:text-ink-darkmuted pt-2 border-t border-borderline-light/60 dark:border-borderline-dark/60">
           <div className="flex items-center gap-2">
-            <ArrowUpDown size={14} />
-            <span>Sort by:</span>
+            <ArrowUpDown size={13} />
+            <span>Sort:</span>
             <button
               onClick={() => {
                 if (sortBy === 'date') setSortOrder((o) => (o === 'ASC' ? 'DESC' : 'ASC'));
                 else { setSortBy('date'); setSortOrder('DESC'); }
               }}
-              className={`font-semibold hover:underline ${sortBy === 'date' ? 'text-indigo-600 dark:text-indigo-400' : ''}`}
+              className={`font-semibold hover:underline ${sortBy === 'date' ? 'text-brand dark:text-brand-dark' : ''}`}
             >
               Date ({sortBy === 'date' ? sortOrder : 'DESC'})
             </button>
@@ -317,17 +308,17 @@ export const TransactionsPage: React.FC = () => {
                 if (sortBy === 'amount') setSortOrder((o) => (o === 'ASC' ? 'DESC' : 'ASC'));
                 else { setSortBy('amount'); setSortOrder('DESC'); }
               }}
-              className={`font-semibold hover:underline ${sortBy === 'amount' ? 'text-indigo-600 dark:text-indigo-400' : ''}`}
+              className={`font-semibold hover:underline ${sortBy === 'amount' ? 'text-brand dark:text-brand-dark' : ''}`}
             >
               Amount ({sortBy === 'amount' ? sortOrder : 'DESC'})
             </button>
           </div>
 
-          <span>Showing {transactions.length} of {pagination.total} transactions</span>
+          <span>{transactions.length} displayed • {pagination.total} total</span>
         </div>
       </div>
 
-      {/* View Content: Virtualized Scrolling vs Table */}
+      {/* Main Content: Virtual Feed vs Table */}
       {viewMode === 'virtual' ? (
         <VirtualTransactionList
           transactions={clientFilteredList}
@@ -336,10 +327,10 @@ export const TransactionsPage: React.FC = () => {
           onDelete={handleDelete}
         />
       ) : (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+        <div className="bg-panel-light dark:bg-panel-dark border border-borderline-light dark:border-borderline-dark rounded-2xl overflow-hidden shadow-moneymatter dark:shadow-moneymatter-dark">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-800">
+              <thead className="bg-soft-light dark:bg-soft-dark text-ink-muted dark:text-ink-darkmuted uppercase tracking-wider font-bold border-b border-borderline-light dark:border-borderline-dark">
                 <tr>
                   <th className="py-3 px-4">Type</th>
                   <th className="py-3 px-4">Date</th>
@@ -349,10 +340,10 @@ export const TransactionsPage: React.FC = () => {
                   <th className="py-3 px-4 text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="divide-y divide-borderline-light/60 dark:divide-borderline-dark/60">
                 {clientFilteredList.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="py-12 text-center text-slate-400">
+                    <td colSpan={6} className="py-12 text-center text-ink-muted">
                       No transactions found matching your criteria.
                     </td>
                   </tr>
@@ -362,43 +353,43 @@ export const TransactionsPage: React.FC = () => {
                     return (
                       <tr
                         key={tx.id}
-                        className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+                        className="hover:bg-soft-light/60 dark:hover:bg-soft-dark/40 transition-colors"
                       >
                         <td className="py-3 px-4">
                           <span
                             className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                               isIncome
-                                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
-                                : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
+                                ? 'bg-emerald-50 text-money-green dark:bg-emerald-950/40 dark:text-money-greendark'
+                                : 'bg-rose-50 text-money-red dark:bg-rose-950/40 dark:text-money-reddark'
                             }`}
                           >
                             {tx.type}
                           </span>
                         </td>
-                        <td className="py-3 px-4 font-mono text-slate-600 dark:text-slate-400">
+                        <td className="py-3 px-4 font-mono text-ink-muted dark:text-ink-darkmuted">
                           {tx.date}
                         </td>
-                        <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">
+                        <td className="py-3 px-4 font-semibold text-ink-light dark:text-ink-dark">
                           {tx.description || '-'}
                         </td>
                         <td className="py-3 px-4">
                           {tx.category_name ? (
                             <span
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold"
                               style={{
-                                backgroundColor: `${tx.category_color || '#6366f1'}15`,
-                                color: tx.category_color || '#6366f1',
+                                backgroundColor: `${tx.category_color || '#7355be'}15`,
+                                color: tx.category_color || '#7355be',
                               }}
                             >
                               <Tag size={10} />
                               {tx.category_name}
                             </span>
                           ) : (
-                            <span className="text-slate-400">Uncategorized</span>
+                            <span className="text-ink-muted opacity-60">Uncategorized</span>
                           )}
                         </td>
                         <td className="py-3 px-4 text-right font-mono font-bold text-sm">
-                          <span className={isIncome ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}>
+                          <span className={isIncome ? 'text-money-green dark:text-money-greendark' : 'text-money-red dark:text-money-reddark'}>
                             {isIncome ? '+' : '-'}${Number(tx.amount).toFixed(2)}
                           </span>
                         </td>
@@ -407,26 +398,26 @@ export const TransactionsPage: React.FC = () => {
                             <button
                               onClick={() => handleOpenEditModal(tx)}
                               disabled={isReadOnly}
-                              title={isReadOnly ? 'Read-only users cannot edit' : 'Edit Transaction'}
+                              title={isReadOnly ? 'Read-only users cannot edit' : 'Edit'}
                               className={`p-1.5 rounded-lg transition-colors ${
                                 isReadOnly
-                                  ? 'opacity-30 cursor-not-allowed text-slate-400'
-                                  : 'text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/40'
+                                  ? 'opacity-25 cursor-not-allowed text-ink-muted'
+                                  : 'text-ink-muted hover:text-brand hover:bg-soft-light dark:hover:bg-soft-dark'
                               }`}
                             >
-                              <Edit2 size={15} />
+                              <Edit2 size={14} />
                             </button>
                             <button
                               onClick={() => handleDelete(tx.id)}
                               disabled={isReadOnly}
-                              title={isReadOnly ? 'Read-only users cannot delete' : 'Delete Transaction'}
+                              title={isReadOnly ? 'Read-only users cannot delete' : 'Delete'}
                               className={`p-1.5 rounded-lg transition-colors ${
                                 isReadOnly
-                                  ? 'opacity-30 cursor-not-allowed text-slate-400'
-                                  : 'text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40'
+                                  ? 'opacity-25 cursor-not-allowed text-ink-muted'
+                                  : 'text-ink-muted hover:text-money-red hover:bg-soft-light dark:hover:bg-soft-dark'
                               }`}
                             >
-                              <Trash2 size={15} />
+                              <Trash2 size={14} />
                             </button>
                           </div>
                         </td>
@@ -438,26 +429,25 @@ export const TransactionsPage: React.FC = () => {
             </table>
           </div>
 
-          {/* Pagination Controls */}
           {pagination.totalPages > 1 && (
-            <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+            <div className="p-3.5 border-t border-borderline-light dark:border-borderline-dark flex items-center justify-between text-xs text-ink-muted">
               <span>
                 Page {pagination.page} of {pagination.totalPages}
               </span>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   disabled={pagination.page <= 1}
                   onClick={() => fetchTransactions(pagination.page - 1)}
-                  className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-30 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="p-1.5 rounded-lg border border-borderline-light dark:border-borderline-dark disabled:opacity-30 hover:bg-soft-light dark:hover:bg-soft-dark transition-colors"
                 >
-                  <ChevronLeft size={16} />
+                  <ChevronLeft size={15} />
                 </button>
                 <button
                   disabled={pagination.page >= pagination.totalPages}
                   onClick={() => fetchTransactions(pagination.page + 1)}
-                  className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-30 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="p-1.5 rounded-lg border border-borderline-light dark:border-borderline-dark disabled:opacity-30 hover:bg-soft-light dark:hover:bg-soft-dark transition-colors"
                 >
-                  <ChevronRight size={16} />
+                  <ChevronRight size={15} />
                 </button>
               </div>
             </div>
@@ -465,7 +455,7 @@ export const TransactionsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Transaction Add / Edit Modal */}
+      {/* Modal */}
       <TransactionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

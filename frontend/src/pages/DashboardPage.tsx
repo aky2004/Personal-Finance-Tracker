@@ -7,12 +7,15 @@ import { IncomeExpenseBarChart } from '../components/Charts/IncomeExpenseBarChar
 import {
   TrendingUp,
   TrendingDown,
-  DollarSign,
   PieChart as PieIcon,
   Zap,
   RefreshCw,
   Clock,
   Layers,
+  ArrowUpRight,
+  ArrowDownLeft,
+  Calendar,
+  Sparkles,
 } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
@@ -58,7 +61,7 @@ export const DashboardPage: React.FC = () => {
     fetchAnalytics();
   }, [fetchAnalytics]);
 
-  // Assignment requirement: useMemo to optimize expensive calculations (like totals, averages)
+  // Assignment requirement: useMemo for calculations
   const stats = useMemo(() => {
     if (!overview) {
       return { income: 0, expense: 0, savings: 0, rate: 0, count: 0 };
@@ -79,29 +82,29 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header & Filter Controls */}
+      {/* 1. Header Toolbar with Filters & Cache Telemetry */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-            Financial Analytics
+          <h1 className="text-xl sm:text-2xl font-black text-ink-light dark:text-ink-dark tracking-tight">
+            Financial Dashboard
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Real-time overview powered by Redis Caching (15 min TTL) & PostgreSQL
+          <p className="text-xs text-ink-muted dark:text-ink-darkmuted mt-0.5">
+            Real-time cash flow overview with sub-millisecond Redis telemetry
           </p>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Cache Status Badge */}
+          {/* Redis Cache Status Pill */}
           <div
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border ${
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold border ${
               cacheMeta.source === 'HIT'
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800'
-                : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-400 dark:border-amber-800'
+                ? 'bg-emerald-50 text-money-green border-emerald-200/80 dark:bg-emerald-950/40 dark:text-money-greendark dark:border-emerald-900/60'
+                : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-900/60'
             }`}
           >
-            <Zap size={13} className={cacheMeta.source === 'HIT' ? 'fill-emerald-500' : ''} />
-            <span>Redis Cache: {cacheMeta.source}</span>
-            <span className="text-[10px] opacity-75 flex items-center gap-0.5">
+            <Zap size={13} className={cacheMeta.source === 'HIT' ? 'fill-current' : ''} />
+            <span>Redis: {cacheMeta.source}</span>
+            <span className="text-[10px] opacity-75 flex items-center gap-0.5 font-mono">
               <Clock size={10} /> {cacheMeta.time}
             </span>
           </div>
@@ -110,7 +113,7 @@ export const DashboardPage: React.FC = () => {
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="px-3 py-1.5 text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="px-3 py-1.5 text-xs bg-panel-light dark:bg-panel-dark text-ink-light dark:text-ink-dark border border-borderline-light dark:border-borderline-dark rounded-xl font-medium focus:outline-none focus:ring-1 focus:ring-brand"
           >
             <option value="">All Months</option>
             {Array.from({ length: 12 }, (_, i) => (
@@ -124,7 +127,7 @@ export const DashboardPage: React.FC = () => {
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(Number(e.target.value))}
-            className="px-3 py-1.5 text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="px-3 py-1.5 text-xs bg-panel-light dark:bg-panel-dark text-ink-light dark:text-ink-dark border border-borderline-light dark:border-borderline-dark rounded-xl font-medium focus:outline-none focus:ring-1 focus:ring-brand"
           >
             {[currentYear - 1, currentYear, currentYear + 1].map((yr) => (
               <option key={yr} value={yr}>
@@ -136,100 +139,89 @@ export const DashboardPage: React.FC = () => {
           <button
             onClick={fetchAnalytics}
             title="Refresh Data"
-            className="p-1.5 text-slate-500 hover:text-indigo-600 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl transition-colors"
+            className="p-1.5 text-ink-muted hover:text-brand bg-panel-light dark:bg-panel-dark border border-borderline-light dark:border-borderline-dark rounded-xl transition-colors"
           >
-            <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
+            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
           </button>
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Total Income */}
-        <div className="p-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
-            <span>Total Income</span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-              <TrendingUp size={16} />
+      {/* 2. MoneyMatter Hero Net Worth / Cash Flow Card */}
+      <div className="p-6 bg-panel-light dark:bg-panel-dark border border-borderline-light dark:border-borderline-dark rounded-2xl shadow-moneymatter dark:shadow-moneymatter-dark space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wider text-ink-muted dark:text-ink-darkmuted">
+              Net Cash Flow (Savings)
+            </span>
+            <div className="flex items-baseline gap-3 mt-1">
+              <span className={`text-3xl sm:text-4xl font-extrabold font-mono tracking-tight ${
+                stats.savings >= 0 ? 'text-money-green dark:text-money-greendark' : 'text-money-red dark:text-money-reddark'
+              }`}>
+                {stats.savings >= 0 ? '+' : ''}${stats.savings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </span>
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-brand/10 text-brand dark:bg-brand-dark/15 dark:text-brand-dark">
+                {stats.rate}% Savings Rate
+              </span>
             </div>
           </div>
-          <div className="mt-2">
-            <span className="text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400">
-              ${stats.income.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-            </span>
+
+          {/* Quick Flow Chips */}
+          <div className="flex items-center gap-3">
+            <div className="px-3.5 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40 flex items-center gap-2">
+              <div className="w-6 h-6 rounded-md bg-emerald-100 dark:bg-emerald-900/50 text-money-green dark:text-money-greendark flex items-center justify-center">
+                <ArrowDownLeft size={14} />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold text-ink-muted dark:text-ink-darkmuted block">Inflow</span>
+                <span className="font-mono text-xs font-bold text-money-green dark:text-money-greendark">
+                  +${stats.income.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+            </div>
+
+            <div className="px-3.5 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/40 flex items-center gap-2">
+              <div className="w-6 h-6 rounded-md bg-rose-100 dark:bg-rose-900/50 text-money-red dark:text-money-reddark flex items-center justify-center">
+                <ArrowUpRight size={14} />
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold text-ink-muted dark:text-ink-darkmuted block">Outflow</span>
+                <span className="font-mono text-xs font-bold text-money-red dark:text-money-reddark">
+                  -${stats.expense.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+            </div>
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">Earnings and salary inflows</p>
         </div>
 
-        {/* Total Expenses */}
-        <div className="p-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
-            <span>Total Expenses</span>
-            <div className="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-400 flex items-center justify-center">
-              <TrendingDown size={16} />
-            </div>
+        {/* Visual Progress Bar (Savings Rate Bar) */}
+        <div>
+          <div className="flex justify-between text-xs text-ink-muted dark:text-ink-darkmuted mb-1.5 font-medium">
+            <span>Budget Utilization</span>
+            <span>{stats.count} recorded transaction{stats.count !== 1 ? 's' : ''}</span>
           </div>
-          <div className="mt-2">
-            <span className="text-2xl font-black font-mono text-rose-600 dark:text-rose-400">
-              ${stats.expense.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-            </span>
+          <div className="w-full h-2.5 bg-soft-light dark:bg-soft-dark rounded-full overflow-hidden flex">
+            <div
+              style={{ width: `${Math.min(100, Math.max(0, stats.rate))}%` }}
+              className="bg-brand dark:bg-brand-dark transition-all duration-500 rounded-full"
+            />
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">Outflows across all categories</p>
-        </div>
-
-        {/* Net Savings */}
-        <div className="p-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
-            <span>Net Balance</span>
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-              <DollarSign size={16} />
-            </div>
-          </div>
-          <div className="mt-2">
-            <span
-              className={`text-2xl font-black font-mono ${
-                stats.savings >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-rose-600'
-              }`}
-            >
-              ${stats.savings.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-            </span>
-          </div>
-          <p className="text-[11px] text-slate-400 mt-1">Income minus expenses</p>
-        </div>
-
-        {/* Savings Rate */}
-        <div className="p-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
-            <span>Savings Rate</span>
-            <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center">
-              <PieIcon size={16} />
-            </div>
-          </div>
-          <div className="mt-2">
-            <span className="text-2xl font-black font-mono text-purple-600 dark:text-purple-400">
-              {stats.rate}%
-            </span>
-          </div>
-          <p className="text-[11px] text-slate-400 mt-1">
-            {stats.count} recorded transaction{stats.count !== 1 ? 's' : ''}
-          </p>
         </div>
       </div>
 
-      {/* Charts Grid */}
+      {/* 3. Three Charts Grid (Recharts) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart 1: Category Distribution Pie Chart */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-panel-light dark:bg-panel-dark border border-borderline-light dark:border-borderline-dark rounded-2xl p-5 shadow-moneymatter dark:shadow-moneymatter-dark space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-borderline-light dark:border-borderline-dark">
             <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <PieIcon size={16} className="text-amber-500" />
-                Category Distribution
+              <h2 className="text-sm font-bold text-ink-light dark:text-ink-dark flex items-center gap-2">
+                <PieIcon size={16} className="text-brand dark:text-brand-dark" />
+                Category Breakdown
               </h2>
-              <p className="text-[11px] text-slate-500">Expenses breakdown by category</p>
+              <p className="text-[11px] text-ink-muted dark:text-ink-darkmuted">Distribution by expense category</p>
             </div>
             {topCategory && (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-soft-light dark:bg-soft-dark text-brand dark:text-brand-dark">
                 Top: {topCategory.category_name}
               </span>
             )}
@@ -238,25 +230,25 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Chart 2: Income vs Expense Bar Chart */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
-          <div className="mb-4">
-            <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <Layers size={16} className="text-indigo-500" />
-              Income vs Expenses
+        <div className="bg-panel-light dark:bg-panel-dark border border-borderline-light dark:border-borderline-dark rounded-2xl p-5 shadow-moneymatter dark:shadow-moneymatter-dark space-y-4">
+          <div className="pb-3 border-b border-borderline-light dark:border-borderline-dark">
+            <h2 className="text-sm font-bold text-ink-light dark:text-ink-dark flex items-center gap-2">
+              <Layers size={16} className="text-money-green dark:text-money-greendark" />
+              Cash Flow Comparison
             </h2>
-            <p className="text-[11px] text-slate-500">Side-by-side comparison (Last 6 Months)</p>
+            <p className="text-[11px] text-ink-muted dark:text-ink-darkmuted">Monthly Income vs Outflow comparison</p>
           </div>
           <IncomeExpenseBarChart data={trends} />
         </div>
 
         {/* Chart 3: Monthly Trends Line Chart */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
-          <div className="mb-4">
-            <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <TrendingUp size={16} className="text-emerald-500" />
-              Monthly Trends
+        <div className="bg-panel-light dark:bg-panel-dark border border-borderline-light dark:border-borderline-dark rounded-2xl p-5 shadow-moneymatter dark:shadow-moneymatter-dark space-y-4">
+          <div className="pb-3 border-b border-borderline-light dark:border-borderline-dark">
+            <h2 className="text-sm font-bold text-ink-light dark:text-ink-dark flex items-center gap-2">
+              <TrendingUp size={16} className="text-brand dark:text-brand-dark" />
+              Cash Flow Trajectory
             </h2>
-            <p className="text-[11px] text-slate-500">Trajectory of cashflow and net savings</p>
+            <p className="text-[11px] text-ink-muted dark:text-ink-darkmuted">Monthly net savings and cash flow trend</p>
           </div>
           <MonthlyTrendLineChart data={trends} />
         </div>

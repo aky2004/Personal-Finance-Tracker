@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useMemo, memo } from 'react';
+import React, { useRef, useState, useMemo, memo } from 'react';
 import { Transaction } from '../types';
 import { ArrowDownLeft, ArrowUpRight, Calendar, Tag, Trash2, Edit2, ShieldAlert } from 'lucide-react';
 
@@ -13,8 +13,8 @@ interface Props {
 
 export const VirtualTransactionList: React.FC<Props> = memo(({
   transactions,
-  itemHeight = 72,
-  height = 500,
+  itemHeight = 68,
+  height = 520,
   isReadOnly,
   onEdit,
   onDelete,
@@ -29,7 +29,6 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
     setScrollTop(e.currentTarget.scrollTop);
   };
 
-  // Calculate visible range with overscan
   const { startIndex, endIndex, offsetY } = useMemo(() => {
     const overscan = 5;
     const start = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
@@ -46,18 +45,18 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
 
   if (totalCount === 0) {
     return (
-      <div className="h-64 flex flex-col items-center justify-center text-slate-400">
-        <p className="text-sm">No transactions match your current filters</p>
+      <div className="h-64 flex flex-col items-center justify-center text-ink-muted dark:text-ink-darkmuted">
+        <p className="text-xs">No transactions match your current filters</p>
       </div>
     );
   }
 
   return (
-    <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm">
-      <div className="px-4 py-3 bg-slate-100 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-        <span>Virtualized Feed ({totalCount.toLocaleString()} items total, rendering {visibleTransactions.length} in DOM)</span>
+    <div className="border border-borderline-light dark:border-borderline-dark rounded-2xl overflow-hidden bg-panel-light dark:bg-panel-dark shadow-moneymatter dark:shadow-moneymatter-dark">
+      <div className="px-5 py-3 bg-soft-light dark:bg-soft-dark border-b border-borderline-light dark:border-borderline-dark flex justify-between items-center text-xs font-bold text-ink-muted dark:text-ink-darkmuted uppercase tracking-wider">
+        <span>Virtualized Stream ({totalCount.toLocaleString()} total • {visibleTransactions.length} in DOM)</span>
         {isReadOnly && (
-          <span className="flex items-center gap-1 text-amber-500 font-medium normal-case">
+          <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-medium normal-case">
             <ShieldAlert size={14} /> Read-Only Mode
           </span>
         )}
@@ -67,7 +66,7 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
         ref={containerRef}
         onScroll={handleScroll}
         style={{ height, overflowY: 'auto', position: 'relative' }}
-        className="divide-y divide-slate-100 dark:divide-slate-800/80"
+        className="divide-y divide-borderline-light/60 dark:divide-borderline-dark/60"
       >
         <div style={{ height: totalHeight, position: 'relative' }}>
           <div
@@ -85,37 +84,37 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
                 <div
                   key={tx.id}
                   style={{ height: itemHeight }}
-                  className="px-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+                  className="px-5 flex items-center justify-between hover:bg-soft-light/60 dark:hover:bg-soft-dark/40 transition-colors"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-3.5 min-w-0">
                     <div
-                      className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
                         isIncome
-                          ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400'
-                          : 'bg-rose-100 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400'
+                          ? 'bg-emerald-50 text-money-green dark:bg-emerald-950/40 dark:text-money-greendark'
+                          : 'bg-rose-50 text-money-red dark:bg-rose-950/40 dark:text-money-reddark'
                       }`}
                     >
-                      {isIncome ? <ArrowDownLeft size={18} /> : <ArrowUpRight size={18} />}
+                      {isIncome ? <ArrowDownLeft size={17} /> : <ArrowUpRight size={17} />}
                     </div>
 
                     <div className="min-w-0">
-                      <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">
+                      <p className="text-xs sm:text-sm font-bold text-ink-light dark:text-ink-dark truncate">
                         {tx.description || (isIncome ? 'Income' : 'Expense')}
                       </p>
-                      <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        <span className="flex items-center gap-1">
-                          <Calendar size={12} />
+                      <div className="flex items-center gap-2 text-[11px] text-ink-muted dark:text-ink-darkmuted mt-0.5">
+                        <span className="flex items-center gap-1 font-mono">
+                          <Calendar size={11} />
                           {tx.date}
                         </span>
                         {tx.category_name && (
                           <span
-                            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium"
+                            className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[10px] font-semibold"
                             style={{
-                              backgroundColor: `${tx.category_color || '#6366f1'}20`,
-                              color: tx.category_color || '#6366f1',
+                              backgroundColor: `${tx.category_color || '#7355be'}15`,
+                              color: tx.category_color || '#7355be',
                             }}
                           >
-                            <Tag size={10} />
+                            <Tag size={9} />
                             {tx.category_name}
                           </span>
                         )}
@@ -125,14 +124,15 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
 
                   <div className="flex items-center gap-4 shrink-0">
                     <span
-                      className={`font-mono font-semibold text-sm ${
-                        isIncome ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
+                      className={`font-mono font-bold text-xs sm:text-sm ${
+                        isIncome
+                          ? 'text-money-green dark:text-money-greendark'
+                          : 'text-money-red dark:text-money-reddark'
                       }`}
                     >
                       {isIncome ? '+' : '-'}${Number(tx.amount).toFixed(2)}
                     </span>
 
-                    {/* RBAC: Edit/Delete buttons disabled/styled for read-only users */}
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => onEdit(tx)}
@@ -140,11 +140,11 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
                         title={isReadOnly ? 'Read-only users cannot edit' : 'Edit Transaction'}
                         className={`p-1.5 rounded-lg transition-colors ${
                           isReadOnly
-                            ? 'opacity-30 cursor-not-allowed text-slate-400'
-                            : 'text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/50'
+                            ? 'opacity-25 cursor-not-allowed text-ink-muted'
+                            : 'text-ink-muted hover:text-brand hover:bg-soft-light dark:hover:bg-soft-dark'
                         }`}
                       >
-                        <Edit2 size={15} />
+                        <Edit2 size={14} />
                       </button>
                       <button
                         onClick={() => onDelete(tx.id)}
@@ -152,11 +152,11 @@ export const VirtualTransactionList: React.FC<Props> = memo(({
                         title={isReadOnly ? 'Read-only users cannot delete' : 'Delete Transaction'}
                         className={`p-1.5 rounded-lg transition-colors ${
                           isReadOnly
-                            ? 'opacity-30 cursor-not-allowed text-slate-400'
-                            : 'text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50'
+                            ? 'opacity-25 cursor-not-allowed text-ink-muted'
+                            : 'text-ink-muted hover:text-money-red hover:bg-soft-light dark:hover:bg-soft-dark'
                         }`}
                       >
-                        <Trash2 size={15} />
+                        <Trash2 size={14} />
                       </button>
                     </div>
                   </div>
