@@ -873,181 +873,210 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 6. SECTION: RBAC ONE-CLICK TESTING */}
-      <section id="rbac" className="py-20 bg-[#100e0c] border-t border-[#24211d]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          <div className="text-center space-y-2 max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#7355be]/15 text-[#9376de] border border-[#7355be]/30">
-              <Shield size={13} /> Strict RBAC Access Matrix
+      {/* 6. Professional Enterprise Footer */}
+      <footer className="border-t border-[#24211d] bg-[#0b0908] pt-16 pb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          {/* Top Row: Brand & Live Health Status */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-12 border-b border-[#24211d]">
+            <div className="space-y-3 max-w-md">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#7355be] to-[#9376de] flex items-center justify-center text-white font-black text-sm shadow-md shadow-[#7355be]/30">
+                  M
+                </div>
+                <span className="font-extrabold text-lg tracking-tight text-white">
+                  Money<span className="text-[#9376de]">Matter</span>
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1a1714] text-[#8c857b] border border-[#24211d]">
+                  v1.0.0
+                </span>
+              </div>
+              <p className="text-xs text-[#8c857b] leading-relaxed">
+                Enterprise-grade personal wealth and financial management platform. Engineered with React 18, Node.js Express, PostgreSQL relational storage, and sub-millisecond Redis caching.
+              </p>
             </div>
-            <h2 className="text-3xl font-black tracking-tight text-white">
-              Instant One-Click Demo Role Logins
-            </h2>
-            <p className="text-xs sm:text-sm text-[#8c857b]">
-              Verify route protections, JWT claims, and disabled write permissions in real time.
-            </p>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#141210] border border-[#24211d] text-xs font-mono">
+                <span className="w-2 h-2 rounded-full bg-[#4cc38a] animate-pulse" />
+                <span className="text-white">API Online</span>
+                <span className="text-[#8c857b]">•</span>
+                <span className="text-[#8c857b]">PostgreSQL 15</span>
+                <span className="text-[#8c857b]">•</span>
+                <span className="text-[#9376de]">Redis Active</span>
+              </div>
+
+              <a
+                href="http://localhost:5001/api/health"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1a1714] hover:bg-[#24211d] border border-[#24211d] text-xs font-semibold text-[#8c857b] hover:text-white transition-colors"
+              >
+                <span>Health Endpoint</span>
+                <ExternalLink size={11} />
+              </a>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Admin */}
-            <div className="p-6 rounded-2xl bg-[#141210] border border-[#24211d] flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-xl bg-purple-950/60 text-purple-400 flex items-center justify-center font-bold">
-                  <Shield size={19} />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold flex items-center gap-2 text-white">
-                    Administrator
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-purple-900/40 text-purple-300 font-bold uppercase">
-                      admin
-                    </span>
-                  </h3>
-                  <p className="text-xs text-[#8c857b] mt-1">
-                    Complete oversight of all data records, user management, and roles.
-                  </p>
-                </div>
-                <ul className="text-xs space-y-2 text-[#8c857b]">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={13} className="text-purple-400" /> Full access to `/admin/users`
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={13} className="text-purple-400" /> Promote or demote user roles
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={13} className="text-purple-400" /> Full CRUD on all transactions
-                  </li>
-                </ul>
-              </div>
-
-              <button
-                onClick={() => handleQuickDemoLogin('admin@finance.com', 'AdminPassword123!')}
-                className="w-full py-2.5 rounded-xl text-xs font-bold bg-[#7355be] hover:bg-[#8365ce] text-white shadow-xs transition-all flex items-center justify-center gap-1.5"
-              >
-                <span>Launch as Admin</span>
-                <ArrowRight size={13} />
-              </button>
+          {/* 4-Column Professional Navigation Directory */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
+            {/* Column 1: Core Capabilities */}
+            <div className="space-y-3">
+              <div className="font-bold text-white uppercase tracking-wider text-[11px]">Platform</div>
+              <ul className="space-y-2 text-[#8c857b]">
+                <li>
+                  <Link to={isAuthenticated ? '/dashboard' : '/login'} className="hover:text-white transition-colors">
+                    Real-time Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link to={isAuthenticated ? '/transactions' : '/login'} className="hover:text-white transition-colors">
+                    Transactions Ledger
+                  </Link>
+                </li>
+                <li>
+                  <a href="#how-it-works" className="hover:text-white transition-colors">
+                    Processing Architecture
+                  </a>
+                </li>
+                <li>
+                  <a href="#automation" className="hover:text-white transition-colors">
+                    Automated Invalidation
+                  </a>
+                </li>
+                <li>
+                  <a href="#faq" className="hover:text-white transition-colors">
+                    Technical FAQ
+                  </a>
+                </li>
+              </ul>
             </div>
 
-            {/* Standard User */}
-            <div className="p-6 rounded-2xl bg-[#141210] border-2 border-[#7355be] flex flex-col justify-between space-y-6 relative">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#7355be] text-white">
-                Default Role
-              </div>
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-xl bg-emerald-950/60 text-[#4cc38a] flex items-center justify-center font-bold">
-                  <User size={19} />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold flex items-center gap-2 text-white">
-                    Standard User
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-900/40 text-[#4cc38a] font-bold uppercase">
-                      user
-                    </span>
-                  </h3>
-                  <p className="text-xs text-[#8c857b] mt-1">
-                    Manage personal income, expenses, categories, and view analytics.
-                  </p>
-                </div>
-                <ul className="text-xs space-y-2 text-[#8c857b]">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={13} className="text-[#4cc38a]" /> Add, edit &amp; delete personal data
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={13} className="text-[#4cc38a]" /> Automatic cache invalidation
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={13} className="text-[#4cc38a]" /> Interactive charts &amp; filters
-                  </li>
-                </ul>
-              </div>
-
-              <button
-                onClick={() => handleQuickDemoLogin('user@finance.com', 'UserPassword123!')}
-                className="w-full py-2.5 rounded-xl text-xs font-bold bg-[#4cc38a] hover:bg-[#3db37a] text-black font-extrabold shadow-xs transition-all flex items-center justify-center gap-1.5"
-              >
-                <span>Launch as Standard User</span>
-                <ArrowRight size={13} />
-              </button>
+            {/* Column 2: Developer & Specs */}
+            <div className="space-y-3">
+              <div className="font-bold text-white uppercase tracking-wider text-[11px]">Documentation</div>
+              <ul className="space-y-2 text-[#8c857b]">
+                <li>
+                  <Link to="/docs" className="hover:text-white transition-colors">
+                    Architecture Docs
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="http://localhost:5001/api/docs"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white flex items-center gap-1 transition-colors"
+                  >
+                    <span>Swagger OpenAPI 3.0</span>
+                    <ExternalLink size={10} />
+                  </a>
+                </li>
+                <li>
+                  <Link to="/docs" className="hover:text-white transition-colors">
+                    RBAC Security Matrix
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/docs" className="hover:text-white transition-colors">
+                    Redis Caching TTL (15m/1h)
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/docs" className="hover:text-white transition-colors">
+                    Rate Limit Thresholds
+                  </Link>
+                </li>
+              </ul>
             </div>
 
-            {/* Read-Only */}
-            <div className="p-6 rounded-2xl bg-[#141210] border border-[#24211d] flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-xl bg-amber-950/60 text-amber-400 flex items-center justify-center font-bold">
-                  <Eye size={19} />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold flex items-center gap-2 text-white">
-                    Read-Only User
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-amber-900/40 text-amber-300 font-bold uppercase">
-                      read-only
-                    </span>
-                  </h3>
-                  <p className="text-xs text-[#8c857b] mt-1">
-                    Strict view-only mode. Form buttons and mutation endpoints are locked.
-                  </p>
-                </div>
-                <ul className="text-xs space-y-2 text-[#8c857b]">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={13} className="text-amber-400" /> View transactions &amp; analytics
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={13} className="text-amber-400" /> Form buttons visually disabled
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={13} className="text-amber-400" /> API returns 403 Forbidden on writes
-                  </li>
-                </ul>
-              </div>
+            {/* Column 3: Help & Community */}
+            <div className="space-y-3">
+              <div className="font-bold text-white uppercase tracking-wider text-[11px]">Support</div>
+              <ul className="space-y-2 text-[#8c857b]">
+                <li>
+                  <Link to="/contact" className="hover:text-white transition-colors">
+                    Help &amp; Support Center
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/aky2004/Personal-Finance-Tracker/issues"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white flex items-center gap-1 transition-colors"
+                  >
+                    <span>Bug Report &amp; Issues</span>
+                    <ExternalLink size={10} />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/aky2004/Personal-Finance-Tracker"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white flex items-center gap-1 transition-colors"
+                  >
+                    <span>GitHub Repository</span>
+                    <ExternalLink size={10} />
+                  </a>
+                </li>
+                <li>
+                  <Link to="/contact" className="hover:text-white transition-colors">
+                    Feature Requests
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
-              <button
-                onClick={() => handleQuickDemoLogin('readonly@finance.com', 'ReadOnlyPassword123!')}
-                className="w-full py-2.5 rounded-xl text-xs font-bold bg-[#f59e0b] hover:bg-[#d97706] text-black font-extrabold shadow-xs transition-all flex items-center justify-center gap-1.5"
-              >
-                <span>Launch as Read-Only</span>
-                <ArrowRight size={13} />
-              </button>
+            {/* Column 4: Quick Demo Access */}
+            <div className="space-y-3">
+              <div className="font-bold text-white uppercase tracking-wider text-[11px]">Instant Demo Roles</div>
+              <div className="p-3.5 rounded-xl bg-[#141210] border border-[#24211d] space-y-2 font-mono text-[11px]">
+                <button
+                  onClick={() => handleQuickDemoLogin('admin@finance.com', 'AdminPassword123!')}
+                  className="w-full text-left flex items-center justify-between text-[#8c857b] hover:text-white transition-colors"
+                >
+                  <span className="text-purple-400 font-bold">Admin</span>
+                  <span>Launch ↗</span>
+                </button>
+                <button
+                  onClick={() => handleQuickDemoLogin('user@finance.com', 'UserPassword123!')}
+                  className="w-full text-left flex items-center justify-between text-[#8c857b] hover:text-white transition-colors"
+                >
+                  <span className="text-[#4cc38a] font-bold">Standard</span>
+                  <span>Launch ↗</span>
+                </button>
+                <button
+                  onClick={() => handleQuickDemoLogin('readonly@finance.com', 'ReadOnlyPassword123!')}
+                  className="w-full text-left flex items-center justify-between text-[#8c857b] hover:text-white transition-colors"
+                >
+                  <span className="text-amber-400 font-bold">Read-Only</span>
+                  <span>Launch ↗</span>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* 7. Footer */}
-      <footer className="border-t border-[#24211d] py-12 bg-[#0b0908]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-[#8c857b]">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded bg-[#7355be] text-white flex items-center justify-center font-black text-[10px]">
-              M
+          {/* Bottom Row: Copyright & Spec Compliance Badges */}
+          <div className="pt-8 border-t border-[#24211d] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#8c857b]">
+            <div className="flex items-center gap-3">
+              <span>&copy; {new Date().getFullYear()} MoneyMatter. Built for TechBridge Assignment.</span>
             </div>
-            <span className="font-bold text-white">MoneyMatter</span>
-            <span>• Full Stack Personal Finance Tracker</span>
-          </div>
 
-          <div className="flex items-center gap-6">
-            <a
-              href="https://github.com/aky2004/Personal-Finance-Tracker"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:underline flex items-center gap-1 text-[#8c857b] hover:text-white"
-            >
-              GitHub Repository <ExternalLink size={11} />
-            </a>
-            <a
-              href="http://localhost:5001/api/docs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:underline flex items-center gap-1 text-[#8c857b] hover:text-white"
-            >
-              Swagger Docs <ExternalLink size={11} />
-            </a>
-            <a
-              href="http://localhost:5001/api/health"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:underline flex items-center gap-1 text-[#8c857b] hover:text-white"
-            >
-              Health Check <ExternalLink size={11} />
-            </a>
+            <div className="flex flex-wrap items-center gap-3 font-mono text-[11px]">
+              <span className="px-2 py-0.5 rounded bg-[#141210] border border-[#24211d] text-[#8c857b]">
+                React 18
+              </span>
+              <span className="px-2 py-0.5 rounded bg-[#141210] border border-[#24211d] text-[#8c857b]">
+                Express.js
+              </span>
+              <span className="px-2 py-0.5 rounded bg-[#141210] border border-[#24211d] text-[#8c857b]">
+                PostgreSQL
+              </span>
+              <span className="px-2 py-0.5 rounded bg-[#141210] border border-[#24211d] text-[#9376de]">
+                Redis Caching
+              </span>
+            </div>
           </div>
         </div>
       </footer>
