@@ -42,11 +42,44 @@ export const LandingPage: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
-  // Active tab state for "Plan and Understand" section
-  const [activePlanTab, setActivePlanTab] = useState<'categories' | 'trends' | 'comparison' | 'ledger'>('categories');
+  // Active FAQ accordion state
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
   
   // Interactive spending pace toggle
   const [spendingPaceMode, setSpendingPaceMode] = useState<'month' | 'avg'>('avg');
+
+  const faqs = [
+    {
+      q: 'How does Redis caching work and when is it invalidated?',
+      a: 'Analytical computations (monthly trends, category distributions, net cashflow) are cached in Redis for 15 minutes (900s), and the category list is cached for 1 hour (3600s). Whenever any transaction is created, updated, or deleted, the backend triggers invalidateUserAnalytics(userId) atomically, flushing Redis cache keys for that user to ensure immediate data freshness on subsequent reads.',
+      badge: 'Redis 15m / 1h TTL',
+    },
+    {
+      q: 'What are the three RBAC roles and what permissions do they have?',
+      a: 'The system enforces 3 distinct roles: (1) Admin has global oversight to view and manage all transactions, categories, and promote/demote user roles at /admin/users. (2) Standard User can perform full CRUD on their own transactions and view personal analytics. (3) Read-Only has view-only access; write endpoints (POST, PUT, DELETE) are rejected with 403 Forbidden, and frontend mutation buttons are visually disabled.',
+      badge: '3-Tier RBAC',
+    },
+    {
+      q: 'What rate limits are enforced across the API?',
+      a: 'To prevent brute-forcing and resource exhaustion, express-rate-limit enforces tiered windows: Authentication routes (/api/auth/*) allow 5 requests per 15 minutes; Transaction routes allow 100 requests per hour; and Analytics routes allow 50 requests per hour. Responses include standard rate limit headers.',
+      badge: 'express-rate-limit',
+    },
+    {
+      q: 'How does Windowed Virtual Scrolling prevent browser lag?',
+      a: 'Rather than rendering thousands of DOM elements which slows down browsers, our virtual scrolling engine computes the current scroll container offset and renders only the ~12-15 rows currently visible in the user viewport. This allows the application to handle 50,000+ financial records smoothly at 60 FPS.',
+      badge: 'Virtual DOM 60 FPS',
+    },
+    {
+      q: 'How is transactional financial data secured in the database?',
+      a: 'The backend connects to PostgreSQL using parameterized SQL queries ($1, $2, ...) to completely eliminate SQL injection vectors. Foreign keys and composite indexes on (user_id, date DESC) ensure relational integrity and high-throughput query execution. Passwords are salted and hashed using bcryptjs.',
+      badge: 'PostgreSQL ACID',
+    },
+    {
+      q: 'Where can I inspect and test the interactive API endpoints?',
+      a: 'A complete OpenAPI 3.0 specification is available at http://localhost:5001/api/docs. Developers can test endpoints directly in the browser, review request and response schemas, and execute authenticated calls using JWT bearer tokens.',
+      badge: 'Swagger OpenAPI 3.0',
+    },
+  ];
 
   const handleQuickDemoLogin = async (email: string, pass: string) => {
     try {
@@ -77,11 +110,14 @@ export const LandingPage: React.FC = () => {
             <a href="#how-it-works" className="hover:text-[#9376de] transition-colors">
               How It Works
             </a>
-            <a href="#plan" className="hover:text-[#9376de] transition-colors">
-              Plan &amp; Budgets
+            <a href="#faq" className="hover:text-[#9376de] transition-colors">
+              FAQ
             </a>
             <Link to="/docs" className="hover:text-[#9376de] transition-colors">
               Docs
+            </Link>
+            <Link to="/contact" className="hover:text-[#9376de] transition-colors">
+              Contact
             </Link>
           </nav>
 
@@ -749,215 +785,89 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. SECTION: PLAN AND UNDERSTAND (Category Budgets from our Seed DB) */}
-      <section id="plan" className="py-24 border-t border-[#24211d] bg-[#0e0c0a] relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="text-left max-w-2xl space-y-3">
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#9376de] tracking-wider uppercase">
-              <span>M PLAN AND UNDERSTAND</span>
+      {/* 5. SECTION: FAQ (Frequently Asked Questions) */}
+      <section id="faq" className="py-24 border-t border-[#24211d] bg-[#0e0c0a] relative">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-[#9376de] tracking-wider uppercase bg-[#7355be]/10 border border-[#7355be]/20">
+              <span>M FREQUENTLY ASKED QUESTIONS</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-              See where it goes, then decide where it should
+              Got questions? We've got answers.
             </h2>
             <p className="text-sm text-[#8c857b] leading-relaxed">
-              Explore your live spending categories, monthly trends, and budget allocations directly from the database.
+              Everything you need to know about our PostgreSQL ledger, Redis sub-millisecond caching, rate limits, and RBAC security.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left Nav Pill Tabs matching our project capabilities */}
-            <div className="lg:col-span-4 space-y-2">
-              <button
-                onClick={() => setActivePlanTab('categories')}
-                className={`w-full p-4 rounded-2xl text-left transition-all border ${
-                  activePlanTab === 'categories'
-                    ? 'bg-[#1a1714] border-[#7355be]/50 shadow-lg'
-                    : 'bg-[#141210] border-[#24211d] hover:bg-[#1a1714]'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${activePlanTab === 'categories' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
-                    <Calendar size={17} />
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold text-white">Category Allocations</div>
-                    <div className="text-xs text-[#8c857b] mt-0.5">
-                      Assign budget targets to Housing, Groceries, and Utilities.
-                    </div>
-                  </div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setActivePlanTab('trends')}
-                className={`w-full p-4 rounded-2xl text-left transition-all border ${
-                  activePlanTab === 'trends'
-                    ? 'bg-[#1a1714] border-[#7355be]/50 shadow-lg'
-                    : 'bg-[#141210] border-[#24211d] hover:bg-[#1a1714]'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${activePlanTab === 'trends' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
-                    <Activity size={17} />
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold text-white">Monthly Trends</div>
-                    <div className="text-xs text-[#8c857b] mt-0.5">
-                      Track inflow and outflow patterns across 6 months.
-                    </div>
-                  </div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setActivePlanTab('comparison')}
-                className={`w-full p-4 rounded-2xl text-left transition-all border ${
-                  activePlanTab === 'comparison'
-                    ? 'bg-[#1a1714] border-[#7355be]/50 shadow-lg'
-                    : 'bg-[#141210] border-[#24211d] hover:bg-[#1a1714]'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${activePlanTab === 'comparison' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
-                    <PieIcon size={17} />
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold text-white">Income vs Expense</div>
-                    <div className="text-xs text-[#8c857b] mt-0.5">
-                      Recharts multi-series comparison chart.
-                    </div>
-                  </div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setActivePlanTab('ledger')}
-                className={`w-full p-4 rounded-2xl text-left transition-all border ${
-                  activePlanTab === 'ledger'
-                    ? 'bg-[#1a1714] border-[#7355be]/50 shadow-lg'
-                    : 'bg-[#141210] border-[#24211d] hover:bg-[#1a1714]'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${activePlanTab === 'ledger' ? 'bg-[#7355be] text-white' : 'bg-[#24211d] text-[#8c857b]'}`}>
-                    <Layers size={17} />
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold text-white">Virtual Ledger</div>
-                    <div className="text-xs text-[#8c857b] mt-0.5">
-                      60 FPS windowed virtual list for large ledgers.
-                    </div>
-                  </div>
-                </div>
-              </button>
-            </div>
-
-            {/* Right Interactive Table View populated with our seed categories */}
-            <div className="lg:col-span-8 rounded-2xl bg-[#141210] border border-[#24211d] p-6 shadow-2xl overflow-x-auto">
-              <div className="min-w-[550px]">
-                {/* Table Header */}
-                <div className="grid grid-cols-12 text-[11px] font-mono font-bold text-[#8c857b] pb-3 border-b border-[#24211d]">
-                  <div className="col-span-6 flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 rounded border border-[#8c857b]/40" />
-                    CATEGORY GROUP
-                  </div>
-                  <div className="col-span-2 text-right">BUDGETED</div>
-                  <div className="col-span-2 text-right">ACTUAL SPENT</div>
-                  <div className="col-span-2 text-right">REMAINING</div>
-                </div>
-
-                {/* Group 1: ESSENTIAL EXPENSES */}
-                <div className="pt-4 space-y-3">
-                  <div className="flex items-center justify-between text-xs font-bold text-white">
-                    <span className="flex items-center gap-2">
-                      <ChevronDown size={13} className="text-[#8c857b]" /> ESSENTIALS (FIXED)
+          <div className="space-y-4">
+            {faqs.map((faq, index) => {
+              const isOpen = openFaq === index;
+              return (
+                <div
+                  key={index}
+                  className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+                    isOpen
+                      ? 'bg-[#141210] border-[#7355be]/50 shadow-xl shadow-[#7355be]/5'
+                      : 'bg-[#141210]/60 border-[#24211d] hover:border-[#38332c]'
+                  }`}
+                >
+                  <button
+                    onClick={() => setOpenFaq(isOpen ? null : index)}
+                    className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 transition-colors"
+                  >
+                    <span className="font-bold text-sm sm:text-base text-white flex items-center gap-3">
+                      <span className="w-2 h-2 rounded-full bg-[#7355be] flex-shrink-0" />
+                      {faq.q}
                     </span>
-                    <span className="text-[11px] font-mono text-[#8c857b]">$1.78K • -$1.49K • $295.96</span>
-                  </div>
-
-                  {/* Housing / Rent Row */}
-                  <div className="grid grid-cols-12 text-xs font-mono py-1.5 items-center">
-                    <div className="col-span-6 pl-4 space-y-1">
-                      <div className="flex items-center justify-between pr-4">
-                        <span className="text-white">Housing / Rent</span>
-                        <span className="text-[10px] text-[#8c857b]">100% used • $1.4K of $1.4K</span>
-                      </div>
-                      <div className="h-1.5 w-full bg-[#24211d] rounded-full overflow-hidden">
-                        <div className="w-full h-full bg-[#4cc38a]" />
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                      <span className="hidden sm:inline-block text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#24211d] text-[#8c857b] border border-[#322e28]">
+                        {faq.badge}
+                      </span>
+                      <div
+                        className={`w-7 h-7 rounded-lg bg-[#1a1714] border border-[#24211d] flex items-center justify-center text-[#8c857b] transition-transform duration-200 ${
+                          isOpen ? 'rotate-180 text-white' : ''
+                        }`}
+                      >
+                        <ChevronDown size={15} />
                       </div>
                     </div>
-                    <div className="col-span-2 text-right text-white">$1,400.00</div>
-                    <div className="col-span-2 text-right text-[#ef6a57]">-$1,400.00</div>
-                    <div className="col-span-2 text-right text-[#8c857b]">$0.00</div>
-                  </div>
+                  </button>
 
-                  {/* Utilities Row */}
-                  <div className="grid grid-cols-12 text-xs font-mono py-1.5 items-center">
-                    <div className="col-span-6 pl-4 space-y-1">
-                      <div className="flex items-center justify-between pr-4">
-                        <span className="text-white">Utilities &amp; Internet</span>
-                        <span className="text-[10px] text-[#4cc38a]">60% used</span>
-                      </div>
-                      <div className="h-1.5 w-full bg-[#24211d] rounded-full overflow-hidden">
-                        <div className="w-[60%] h-full bg-[#4cc38a]" />
-                      </div>
+                  {isOpen && (
+                    <div className="px-5 pb-5 sm:px-6 sm:pb-6 pt-1 text-xs sm:text-sm text-[#8c857b] leading-relaxed border-t border-[#24211d]/60 font-sans">
+                      <p>{faq.a}</p>
                     </div>
-                    <div className="col-span-2 text-right text-white">$250.00</div>
-                    <div className="col-span-2 text-right text-[#ef6a57]">-$150.00</div>
-                    <div className="col-span-2 text-right text-[#4cc38a]">$100.00</div>
-                  </div>
+                  )}
                 </div>
+              );
+            })}
+          </div>
 
-                {/* Group 2: VARIABLE DISCRETIONARY */}
-                <div className="pt-6 space-y-3 border-t border-[#24211d] mt-4">
-                  <div className="flex items-center justify-between text-xs font-bold text-white">
-                    <span className="flex items-center gap-2">
-                      <ChevronDown size={13} className="text-[#8c857b]" /> VARIABLE &amp; LIVING
-                    </span>
-                    <span className="text-[11px] font-mono text-[#8c857b]">$1.45K • -$870.00 • $580.00</span>
-                  </div>
-
-                  {/* Food / Groceries */}
-                  <div className="grid grid-cols-12 text-xs font-mono py-1.5 items-center">
-                    <div className="col-span-6 pl-4 space-y-1">
-                      <div className="flex items-center justify-between pr-4">
-                        <span className="text-white">Food &amp; Groceries</span>
-                        <span className="text-[10px] text-[#4cc38a]">✓ On Track</span>
-                      </div>
-                      <div className="h-1.5 w-full bg-[#24211d] rounded-full overflow-hidden">
-                        <div className="w-[65%] h-full bg-[#4cc38a]" />
-                      </div>
-                    </div>
-                    <div className="col-span-2 text-right text-white">$650.00</div>
-                    <div className="col-span-2 text-right text-[#ef6a57]">-$420.00</div>
-                    <div className="col-span-2 text-right text-[#4cc38a]">$230.00</div>
-                  </div>
-
-                  {/* Transportation */}
-                  <div className="grid grid-cols-12 text-xs font-mono py-1.5 items-center">
-                    <div className="col-span-6 pl-4 space-y-1">
-                      <div className="flex items-center justify-between pr-4">
-                        <span className="text-white">Transportation</span>
-                        <span className="text-[10px] text-[#4cc38a]">✓ Funded</span>
-                      </div>
-                      <div className="h-1.5 w-full bg-[#24211d] rounded-full overflow-hidden">
-                        <div className="w-[50%] h-full bg-[#4cc38a]" />
-                      </div>
-                    </div>
-                    <div className="col-span-2 text-right text-white">$300.00</div>
-                    <div className="col-span-2 text-right text-[#ef6a57]">-$150.00</div>
-                    <div className="col-span-2 text-right text-[#4cc38a]">$150.00</div>
-                  </div>
-                </div>
-
-                {/* Table Footer Summary */}
-                <div className="grid grid-cols-12 text-xs font-mono font-bold pt-4 mt-6 border-t border-[#24211d] text-white">
-                  <div className="col-span-6 pl-4 text-[#8c857b]">Total Categorized Budget</div>
-                  <div className="col-span-2 text-right">$3,230.00</div>
-                  <div className="col-span-2 text-right text-[#ef6a57]">-$2,120.00</div>
-                  <div className="col-span-2 text-right text-[#4cc38a]">+$1,110.00</div>
-                </div>
+          {/* Quick Help Footer inside FAQ */}
+          <div className="p-6 rounded-2xl bg-[#141210] border border-[#24211d] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-[#7355be]/20 text-[#9376de] flex items-center justify-center font-bold">
+                ?
               </div>
+              <div>
+                <div className="text-white font-bold">Still have questions?</div>
+                <div className="text-[#8c857b]">Check out our comprehensive technical documentation or contact support.</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Link
+                to="/docs"
+                className="px-4 py-2 rounded-xl bg-[#24211d] hover:bg-[#322e28] text-white font-bold transition-all text-xs"
+              >
+                Read Docs
+              </Link>
+              <Link
+                to="/contact"
+                className="px-4 py-2 rounded-xl bg-[#7355be] hover:bg-[#8365ce] text-white font-bold transition-all text-xs"
+              >
+                Contact Support
+              </Link>
             </div>
           </div>
         </div>

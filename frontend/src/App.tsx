@@ -14,6 +14,7 @@ const AdminUsersPage = lazy(() => import('./pages/AdminUsersPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const DocsPage = lazy(() => import('./pages/DocsPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
 
 const PageFallback: React.FC = () => (
   <div className="min-h-[50vh] flex flex-col items-center justify-center gap-3">
@@ -50,6 +51,7 @@ export const App: React.FC = () => {
               {/* Public Landing Page */}
               <Route path="/" element={<LandingPage />} />
               <Route path="/docs" element={<DocsPage />} />
+              <Route path="/contact" element={<ContactPage />} />
 
               {/* Public Auth Routes */}
               <Route path="/login" element={<LoginPage />} />
