@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { AuthModal } from '../components/AuthModal';
 import api from '../api/client';
 import {
   Wallet,
@@ -37,16 +38,37 @@ import {
   Users
 } from 'lucide-react';
 
-export const LandingPage: React.FC = () => {
+interface LandingPageProps {
+  initialAuthModalOpen?: boolean;
+  initialAuthModalMode?: 'login' | 'register';
+  onModalClose?: () => void;
+}
+
+export const LandingPage: React.FC<LandingPageProps> = ({
+  initialAuthModalOpen = false,
+  initialAuthModalMode = 'login',
+  onModalClose,
+}) => {
   const { isAuthenticated, login } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+
+  // Auth Modal State (Modal Form)
+  const [authModalOpen, setAuthModalOpen] = useState(initialAuthModalOpen);
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>(initialAuthModalMode);
 
   // Active FAQ accordion state
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   
   // Interactive spending pace toggle
   const [spendingPaceMode, setSpendingPaceMode] = useState<'month' | 'avg'>('avg');
+
+  const handleCloseModal = () => {
+    setAuthModalOpen(false);
+    if (onModalClose) {
+      onModalClose();
+    }
+  };
 
   const faqs = [
     {
@@ -139,13 +161,17 @@ export const LandingPage: React.FC = () => {
                 <ArrowRight size={13} />
               </Link>
             ) : (
-              <Link
-                to="/login"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-[#7355be] hover:bg-[#8365ce] text-white shadow-xs transition-all"
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthModalMode('login');
+                  setAuthModalOpen(true);
+                }}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-[#7355be] hover:bg-[#8365ce] text-white shadow-xs transition-all cursor-pointer"
               >
                 <span>Login</span>
                 <ArrowRight size={13} />
-              </Link>
+              </button>
             )}
           </div>
         </div>
@@ -1024,6 +1050,13 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* Auth Modal (Modal Form) */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={handleCloseModal}
+        defaultMode={authModalMode}
+      />
     </div>
   );
 };
